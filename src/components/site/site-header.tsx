@@ -42,12 +42,13 @@ export function SiteHeader({ whatsappHref }: { whatsappHref: string | null }) {
       className={cn(
         "sticky top-0 z-40 transition-colors duration-300",
         overlay && "-mb-[76px]",
-        transparent ? "bg-transparent on-dark" : "bg-white/95 backdrop-blur border-b border-line",
+        transparent ? "bg-transparent on-dark" : "bg-white/90 backdrop-blur-md border-b border-line",
+        scrolled && !transparent && "shadow-[0_10px_30px_-20px_rgba(11,39,38,0.35)]",
       )}
     >
       <div className="container-page flex h-[76px] items-center justify-between gap-6">
         <Link href="/" aria-label="Lanka Veya Travel home" className="shrink-0">
-          <Wordmark tone={transparent ? "light" : "dark"} />
+          <Wordmark tone={transparent ? "light" : "dark"} animated />
         </Link>
 
         <nav aria-label="Main" className="hidden lg:block">
@@ -60,9 +61,9 @@ export function SiteHeader({ whatsappHref }: { whatsappHref: string | null }) {
                     href={item.href}
                     aria-current={active ? "page" : undefined}
                     className={cn(
-                      "py-2 transition-colors border-b",
-                      transparent ? "text-white/90 hover:text-white" : "text-ink hover:text-teal-700",
-                      active ? (transparent ? "border-champagne" : "border-teal-700") : "border-transparent",
+                      "relative py-2 transition-colors after:absolute after:inset-x-0 after:-bottom-0.5 after:h-px after:origin-left after:transition-transform after:duration-500 after:ease-[var(--ease-out-soft)]",
+                      transparent ? "text-white/90 hover:text-white after:bg-champagne" : "text-ink hover:text-teal-700 after:bg-teal-700",
+                      active ? "after:scale-x-100" : "after:scale-x-0 hover:after:scale-x-100",
                     )}
                   >
                     {item.label}

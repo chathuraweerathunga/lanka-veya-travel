@@ -4,7 +4,7 @@ import type { PublicSettings } from "@/lib/data/settings";
 import { safeExternalUrl } from "@/lib/data/settings";
 import { whatsappLink, whatsappMessages } from "@/lib/whatsapp";
 import { FOOTER_NAV } from "./nav";
-import { Wordmark } from "./wordmark";
+import { LogoMark, Wordmark } from "./wordmark";
 
 export function platformLinks(settings: PublicSettings) {
   const p = settings.platforms;
@@ -34,7 +34,8 @@ export function SiteFooter({ settings }: { settings: PublicSettings }) {
   const social = socialLinks(settings);
 
   return (
-    <footer className="on-dark bg-teal-950 text-white/80 mt-auto">
+    <footer className="on-dark relative isolate mt-auto overflow-hidden bg-teal-950 text-white/80">
+      <LogoMark mono className="pointer-events-none absolute -bottom-24 -right-16 -z-10 h-[30rem] text-white/[0.035]" />
       <div className="container-page grid gap-12 py-16 md:grid-cols-12">
         <div className="md:col-span-4 space-y-5">
           <Wordmark tone="light" />

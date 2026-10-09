@@ -15,7 +15,7 @@ export function TourCard({ tour, priority = false }: { tour: TourSummary; priori
   const duration = durationLabel(tour);
   return (
     <article className="group relative flex flex-col">
-      <div className="relative aspect-[4/5] overflow-hidden rounded-sm bg-ivory-deep">
+      <div className="lift relative aspect-[4/5] overflow-hidden rounded-sm bg-ivory-deep">
         {tour.cover_image_url ? (
           <Image
             src={tour.cover_image_url}
@@ -23,7 +23,7 @@ export function TourCard({ tour, priority = false }: { tour: TourSummary; priori
             fill
             preload={priority}
             sizes="(min-width: 1024px) 30vw, (min-width: 640px) 45vw, 92vw"
-            className="object-cover transition-transform duration-700 ease-[var(--ease-out-soft)] group-hover:scale-[1.03]"
+            className="object-cover transition-transform duration-1000 ease-[var(--ease-out-soft)] group-hover:scale-[1.07]"
           />
         ) : null}
       </div>
@@ -31,7 +31,7 @@ export function TourCard({ tour, priority = false }: { tour: TourSummary; priori
         <p className="text-sm text-palm-700">
           {[duration, ...tour.categories.slice(0, 2).map((c) => TOUR_CATEGORIES[c] ?? c)].filter(Boolean).join(", ")}
         </p>
-        <h3 className="text-2xl text-teal-900">
+        <h3 className="text-2xl text-teal-900 transition-colors group-hover:text-teal-700">
           <Link href={`/tours/${tour.slug}`} className="after:absolute after:inset-0 focus-visible:outline-none">
             {tour.name}
           </Link>

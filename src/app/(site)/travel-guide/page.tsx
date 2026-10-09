@@ -24,18 +24,18 @@ export default async function TravelGuidePage() {
         crumbs={[{ href: "/travel-guide", label: "Travel guide" }]}
       />
       <div className="container-page py-14 md:py-20">
-        <ul className="grid gap-x-8 gap-y-14 sm:grid-cols-2 lg:grid-cols-3">
+        <ul className="reveal-group grid gap-x-8 gap-y-14 sm:grid-cols-2 lg:grid-cols-3">
           {GUIDES.map((g, i) => (
             <li key={g.slug}>
               <Link href={`/travel-guide/${g.slug}`} className="group block">
-                <div className="relative aspect-[4/3] overflow-hidden rounded-sm bg-teal-900">
+                <div className="lift relative aspect-[4/3] overflow-hidden rounded-sm bg-teal-900">
                   <Image
                     src={g.image.url}
                     alt={g.image.alt}
                     fill
                     preload={i < 2}
                     sizes="(min-width: 1024px) 30vw, (min-width: 640px) 45vw, 100vw"
-                    className="object-cover transition-transform duration-700 ease-[var(--ease-out-soft)] group-hover:scale-[1.04]"
+                    className="object-cover transition-transform duration-700 ease-[var(--ease-out-soft)] group-hover:scale-[1.08]"
                   />
                 </div>
                 <h2 className="mt-5 text-2xl text-teal-900 underline-offset-4 group-hover:underline">{g.title}</h2>
