@@ -2,6 +2,21 @@
 
 Target: **Vercel** (app) + **Supabase** (database, auth, storage). Nothing in this repository is live until you complete these steps and verify them.
 
+## Current status (9 Oct 2026)
+
+| Step | State |
+| --- | --- |
+| Supabase project `lanka-veya-travel` (ref `cuhtgqciqkjazubootoq`, Mumbai) | Created |
+| Tables, RLS policies on all 26 tables, procedures, `media` bucket, `seed.sql` content | Applied |
+| `supabase/finish-setup.sql` (privilege hardening, `save_quotation_draft`, `save_tour`) | **To do — paste into SQL Editor and Run** |
+| Vercel project `lanka-veya-travel` (functions in `bom1`) with public env vars + `RATE_LIMIT_SALT` | Created |
+| Vercel ↔ GitHub connection | **To do — Project → Settings → Git → Connect `chathuraweerathunga/lanka-veya-travel`** |
+| `SUPABASE_SECRET_KEY` in Vercel (Production + Preview, *Sensitive*) | **To do** |
+| Supabase Auth settings (sign-ups off, redirect URLs, templates) | **To do** — see below |
+| Resend domain + `RESEND_API_KEY` | **To do** |
+| First owner account (`node scripts/bootstrap-admin.mjs --invite`) | **To do**, after the secret key is set |
+| Custom domain `lankaveyatravel.com` | **To do**; then set `NEXT_PUBLIC_SITE_URL` to it and remove `ALLOW_INDEXING=false` |
+
 ## 1. Supabase project
 
 1. Create a project at <https://supabase.com/dashboard>. Choose a region near your visitors and team (e.g. *Mumbai, ap-south-1* for Sri Lanka). Note the database password in a password manager.
