@@ -1,43 +1,40 @@
+import { useId } from "react";
 import { cn } from "@/lib/utils";
 
+/** The mark's geometry, shared with brand/build_logo.py (100 × 150 box). */
+export const MARK_ISLAND = "M42 4C49 20 70 42 81 66C93 92 88 122 66 137C46 150 19 141 12 116C6 94 15 72 25 52C32 37 38 22 42 4Z";
+export const MARK_ROAD = "M30 150C40 120 72 112 60 84C50 60 30 50 44 0";
+
 /**
- * Original Lanka Veya Travel mark: a stylised island outline with a dashed
- * journey route and a destination point. "Veya" set in the display serif.
+ * Lanka Veya Travel mark: the island of Sri Lanka, read also as a tea leaf, cut
+ * by a winding road, with a rising sun. The island takes the current text colour.
+ * `animated` draws the road and raises the sun once on first paint; `mono` draws the sun in the text colour too.
  */
-export function LogoMark({ className, animated = false }: { className?: string; animated?: boolean }) {
+export function LogoMark({ className, animated = false, mono = false }: { className?: string; animated?: boolean; mono?: boolean }) {
+  const id = useId().replace(/:/g, "");
   return (
-    <svg viewBox="0 0 40 56" className={cn("h-9 w-auto", className)} aria-hidden focusable="false">
-      <path
-        d="M20 3c3 3 6.2 9 10 17 4.8 9 7 18 3 26-4 7-15 9-21 4-6-5-7-14-4-23 3-9 7-18 12-24Z"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="1.6"
-        strokeLinejoin="round"
-      />
-      <path
-        d="M19 9c-2 7 4 10 3 17s-8 9-5 16 9 3 10 0"
-        fill="none"
-        stroke="var(--color-champagne)"
-        strokeWidth="1.6"
-        strokeLinecap="round"
-        strokeDasharray="2.4 3"
-        className={animated ? "route-draw" : undefined}
-      />
-      <circle cx="27" cy="42" r="2.2" fill="var(--color-champagne)" />
+    <svg viewBox="0 0 100 150" className={cn("h-10 w-auto overflow-visible", animated && "logo-animated", className)} aria-hidden focusable="false">
+      <mask id={`road-${id}`} maskUnits="userSpaceOnUse" x="-10" y="-10" width="120" height="170">
+        <rect x="-10" y="-10" width="120" height="170" fill="#fff" />
+        <path className="logo-road" d={MARK_ROAD} fill="none" stroke="#000" strokeWidth="5.2" pathLength={1} />
+      </mask>
+      <path d={MARK_ISLAND} fill="currentColor" mask={`url(#road-${id})`} />
+      <circle className="logo-sun" cx="78" cy="25" r="8.5" fill={mono ? "currentColor" : "var(--color-champagne)"} />
     </svg>
   );
 }
 
-export function Wordmark({ className, tone = "dark" }: { className?: string; tone?: "dark" | "light" }) {
+export function Wordmark({ className, tone = "dark", animated = false }: { className?: string; tone?: "dark" | "light"; animated?: boolean }) {
   return (
-    <span className={cn("inline-flex items-center gap-2.5", tone === "light" ? "text-white" : "text-teal-900", className)}>
-      <LogoMark />
+    <span className={cn("group/wordmark inline-flex items-center gap-3", tone === "light" ? "text-white" : "text-teal-900", className)}>
+      <LogoMark animated={animated} className={tone === "light" ? "text-ivory" : undefined} />
       <span className="flex flex-col leading-none">
-        <span className="font-display text-[1.45rem] tracking-[-0.02em]" style={{ fontVariationSettings: '"opsz" 72' }}>
+        <span className="font-display text-[1.5rem] tracking-[-0.01em]" style={{ fontVariationSettings: '"opsz" 72', fontWeight: 420 }}>
           Lanka Veya
         </span>
-        <span className={cn("mt-1 text-[0.68rem] tracking-[0.32em]", tone === "light" ? "text-champagne" : "text-champagne-700")}>
+        <span className={cn("mt-1.5 flex items-center gap-2 text-[0.62rem] font-semibold tracking-[0.42em]", tone === "light" ? "text-champagne" : "text-champagne-700")}>
           TRAVEL
+          <span className="h-px flex-1 bg-current opacity-80 transition-[flex-grow] duration-500 ease-[var(--ease-out-soft)]" aria-hidden />
         </span>
       </span>
     </span>

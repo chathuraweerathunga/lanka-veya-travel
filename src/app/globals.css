@@ -139,6 +139,152 @@
   }
 }
 
+/* ------------------------------------------------------------------
+   Motion. Entrance animations are pure CSS so they run before hydration;
+   scroll reveals use scroll-driven animations where supported and simply
+   show the content elsewhere. All of it is off under reduced motion.
+   ------------------------------------------------------------------ */
+
+/* Logo: the road carves through the island, then the sun rises. */
+.logo-animated .logo-road {
+  stroke-dasharray: 1;
+  animation: road-carve 1.5s var(--ease-out-soft) 0.35s both;
+}
+.logo-animated .logo-sun {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: sun-rise 1.3s var(--ease-out-soft) 1.1s both;
+}
+@keyframes road-carve {
+  from { stroke-dashoffset: 1; }
+  to { stroke-dashoffset: 0; }
+}
+@keyframes sun-rise {
+  from { opacity: 0; transform: translateY(14px) scale(0.6); }
+  to { opacity: 1; transform: none; }
+}
+
+/* Staggered entrance; set --d for the delay. */
+.rise {
+  animation: rise 1.1s var(--ease-out-soft) var(--d, 0s) both;
+}
+@keyframes rise {
+  from { opacity: 0; transform: translateY(28px); filter: blur(6px); }
+  to { opacity: 1; transform: none; filter: none; }
+}
+
+/* Hero photograph settles slowly into place. */
+.hero-zoom {
+  animation: hero-zoom 3.2s var(--ease-out-soft) both;
+}
+@keyframes hero-zoom {
+  from { transform: scale(1.14); }
+  to { transform: scale(1); }
+}
+
+/* Scroll reveal: single elements (.reveal) or staggered children (.reveal-group). */
+@supports (animation-timeline: view()) {
+  .reveal,
+  .reveal-group > * {
+    animation: reveal linear both;
+    animation-timeline: view();
+    animation-range: entry 0% cover 22%;
+  }
+  .reveal-group > :nth-child(2) { animation-range: entry 6% cover 26%; }
+  .reveal-group > :nth-child(3) { animation-range: entry 12% cover 30%; }
+  .reveal-group > :nth-child(4) { animation-range: entry 18% cover 34%; }
+  .reveal-group > :nth-child(5) { animation-range: entry 24% cover 38%; }
+  .reveal-group > :nth-child(n + 6) { animation-range: entry 28% cover 40%; }
+}
+@keyframes reveal {
+  from { opacity: 0; transform: translateY(48px); }
+  to { opacity: 1; transform: none; }
+}
+
+/* Eyebrow label with a gold rule that draws in. */
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: var(--color-champagne-700);
+}
+.eyebrow::before {
+  content: "";
+  width: 2.25rem;
+  height: 1px;
+  background: currentColor;
+  transform-origin: left;
+  animation: rule-draw 1.2s var(--ease-out-soft) 0.2s both;
+}
+.on-dark .eyebrow { color: var(--color-champagne); }
+@supports (animation-timeline: view()) {
+  .eyebrow::before {
+    animation: rule-draw linear both;
+    animation-timeline: view();
+    animation-range: entry 10% cover 30%;
+  }
+}
+@keyframes rule-draw {
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); }
+}
+
+/* Endless destination ribbon. The list is rendered twice for a seamless loop. */
+.marquee-track {
+  display: flex;
+  width: max-content;
+  animation: marquee 48s linear infinite;
+}
+.marquee:hover .marquee-track { animation-play-state: paused; }
+@keyframes marquee {
+  to { transform: translateX(-50%); }
+}
+
+/* Gentle float for decorative accents. */
+.float-slow {
+  animation: float 7s ease-in-out infinite;
+}
+@keyframes float {
+  50% { transform: translateY(-10px); }
+}
+
+/* Card lift used by tour and guide cards. */
+.lift {
+  transition: transform 0.6s var(--ease-out-soft), box-shadow 0.6s var(--ease-out-soft);
+}
+.group:hover .lift {
+  transform: translateY(-6px);
+  box-shadow: 0 24px 48px -24px rgb(11 39 38 / 0.45);
+}
+
+/* Animated underline for text links. */
+.link-grow {
+  background: linear-gradient(currentColor, currentColor) 0 100% / 0 1px no-repeat;
+  transition: background-size 0.45s var(--ease-out-soft);
+}
+.link-grow:hover,
+.group:hover .link-grow {
+  background-size: 100% 1px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal,
+  .reveal-group > *,
+  .eyebrow::before,
+  .marquee-track,
+  .float-slow,
+  .hero-zoom,
+  .rise,
+  .logo-animated .logo-road,
+  .logo-animated .logo-sun {
+    animation: none !important;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,

@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import type { Metadata } from "next";
+import type { CSSProperties } from "react";
 import { ArrowUpRight, Mail, MessageCircle } from "lucide-react";
 import { ButtonLink } from "@/components/ui/button";
 import { SectionHeading } from "@/components/site/page-intro";
@@ -16,6 +17,7 @@ import { getPublicSettings, safeExternalUrl } from "@/lib/data/settings";
 import { whatsappLink, whatsappMessages } from "@/lib/whatsapp";
 import { getSiteUrl } from "@/lib/env";
 import { formatDate } from "@/lib/utils";
+import { MARK_ISLAND } from "@/components/site/wordmark";
 
 export async function generateMetadata(): Promise<Metadata> {
   const s = await getPublicSettings();
@@ -26,6 +28,8 @@ export async function generateMetadata(): Promise<Metadata> {
     openGraph: { title: s.seo.default_title, description: s.seo.default_description, images: [s.seo.og_image_url || "/og"], type: "website" },
   };
 }
+
+const delay = (d: string) => ({ "--d": d }) as CSSProperties;
 
 const EXPERIENCES = [
   {
@@ -90,6 +94,9 @@ export default async function HomePage() {
   const b = settings.business;
   const hero = settings.hero;
   const wa = whatsappLink(b.whatsapp, whatsappMessages.general());
+  // "Discover Sri Lanka. Travel Your Way." → second sentence set as an italic gold accent.
+  const split = hero.headline.match(/^(.+?[.!?])\s+(.+)$/);
+  const headline = split ? { lead: split[1], accent: split[2] } : { lead: hero.headline, accent: "" };
   const platforms = platformLinks(settings);
   const reviewLinks = [
     { label: "Review us on Tripadvisor", href: safeExternalUrl(settings.platforms.tripadvisor_review_url) },
@@ -120,7 +127,7 @@ export default async function HomePage() {
 
       {/* 1–8. Hero with quote panel */}
       <section className="on-dark relative isolate min-h-[100svh] overflow-hidden bg-teal-950 text-white">
-        <Image src={hero.image_url} alt={hero.image_alt} fill preload sizes="100vw" className="-z-20 object-cover" />
+        <Image src={hero.image_url} alt={hero.image_alt} fill preload sizes="100vw" className="hero-zoom -z-20 object-cover" />
         <div className="absolute inset-0 -z-10 bg-[linear-gradient(100deg,rgba(11,39,38,0.88)_0%,rgba(11,39,38,0.55)_45%,rgba(11,39,38,0.15)_100%)]" aria-hidden />
         <div className="absolute inset-x-0 bottom-0 -z-10 h-1/2 bg-gradient-to-t from-teal-950/80 to-transparent" aria-hidden />
         <svg className="pointer-events-none absolute right-[8%] top-[14%] -z-10 hidden h-[62%] text-champagne lg:block" viewBox="0 0 160 420" fill="none" aria-hidden>
@@ -130,11 +137,15 @@ export default async function HomePage() {
 
         <div className="container-page flex min-h-[100svh] flex-col justify-end gap-10 pb-10 pt-32 lg:grid lg:grid-cols-[1.25fr_minmax(0,25rem)] lg:items-end lg:gap-16 lg:pb-16">
           <div className="space-y-7">
+            <p className="eyebrow rise" style={delay("0.15s")}>Private journeys across Sri Lanka</p>
             <h1 className="max-w-[13ch] text-[clamp(3rem,7.4vw,6.4rem)] font-[340] leading-[0.98] text-white" style={{ fontVariationSettings: '"opsz" 144' }}>
-              {hero.headline}
+              <span className="rise block" style={delay("0.25s")}>{headline.lead}</span>
+              {headline.accent ? (
+                <span className="rise block font-[300] italic text-champagne" style={delay("0.45s")}>{headline.accent}</span>
+              ) : null}
             </h1>
-            <p className="max-w-xl text-lg text-white/85 md:text-xl">{hero.subheading}</p>
-            <div className="flex flex-wrap items-center gap-3">
+            <p className="rise max-w-xl text-lg text-white/85 md:text-xl" style={delay("0.65s")}>{hero.subheading}</p>
+            <div className="rise flex flex-wrap items-center gap-3" style={delay("0.8s")}>
               <ButtonLink href="/plan-my-trip" variant="accent" size="lg">
                 Plan your journey
               </ButtonLink>
@@ -149,14 +160,34 @@ export default async function HomePage() {
             </div>
             {hero.image_credit ? <p className="text-xs text-white/55">{hero.image_credit}</p> : null}
           </div>
-          <QuickQuotePanel />
+          <div className="rise" style={delay("0.95s")}>
+            <QuickQuotePanel />
+          </div>
         </div>
       </section>
+
+      {/* Destination ribbon */}
+      {destinations.length ? (
+        <div className="marquee on-dark overflow-hidden border-y border-white/10 bg-teal-950 py-5 text-champagne" aria-hidden>
+          <div className="marquee-track">
+            {[0, 1].map((copy) => (
+              <ul key={copy} className="flex shrink-0 items-center">
+                {destinations.map((d) => (
+                  <li key={d.slug} className="flex items-center whitespace-nowrap font-display text-2xl italic font-[300] md:text-3xl">
+                    <span className="px-8">{d.name}</span>
+                    <svg viewBox="0 0 100 150" className="h-4 w-auto text-champagne/60" aria-hidden><path d={MARK_ISLAND} fill="currentColor" /></svg>
+                  </li>
+                ))}
+              </ul>
+            ))}
+          </div>
+        </div>
+      ) : null}
 
       {/* What we do */}
       <section aria-labelledby="services-heading" className="border-b border-line">
         <h2 id="services-heading" className="sr-only">What we arrange</h2>
-        <div className="container-page grid divide-y divide-line md:grid-cols-4 md:divide-x md:divide-y-0">
+        <div className="reveal-group container-page grid divide-y divide-line md:grid-cols-4 md:divide-x md:divide-y-0">
           {[
             { href: "/tours", title: "Private tours", body: "Round tours and day trips with your own driver." },
             { href: "/airport-transfers", title: "Airport transfers", body: "Met at arrivals, taken straight to your hotel." },
@@ -164,7 +195,7 @@ export default async function HomePage() {
             { href: "/plan-my-trip", title: "Custom itineraries", body: "Tell us your wish list; we shape the route." },
           ].map((s) => (
             <Link key={s.href} href={s.href} className="group block py-7 md:px-6 md:first:pl-0 md:last:pr-0">
-              <span className="flex items-center justify-between font-display text-xl text-teal-900">
+              <span className="flex items-center justify-between font-display text-xl text-teal-900 transition-colors group-hover:text-teal-700">
                 {s.title}
                 <ArrowUpRight className="size-4 text-champagne-700 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" aria-hidden />
               </span>
@@ -178,12 +209,13 @@ export default async function HomePage() {
       <section className="py-20 md:py-28">
         <div className="container-page space-y-12">
           <SectionHeading
+            eyebrow="Signature tours"
             title="Journeys to start from"
             lede="Each tour is a starting point. Change the pace, swap a destination or add a few beach days, and we'll quote for your version."
             action={<ButtonLink href="/tours" variant="outline">See all tours</ButtonLink>}
           />
           {featured.length ? (
-            <div className="grid gap-x-8 gap-y-14 sm:grid-cols-2 lg:grid-cols-3">
+            <div className="reveal-group grid gap-x-8 gap-y-14 sm:grid-cols-2 lg:grid-cols-3">
               {featured.slice(0, 3).map((t, i) => (
                 <TourCard key={t.id} tour={t} priority={i === 0} />
               ))}
@@ -203,11 +235,12 @@ export default async function HomePage() {
         <section className="bg-ivory py-20 md:py-28">
           <div className="container-page space-y-12">
             <SectionHeading
+              eyebrow="Destinations"
               title="Where the island takes you"
               lede="Ancient capitals, misty tea country, wildlife parks and two coastlines with opposite seasons."
               action={<ButtonLink href="/destinations" variant="outline">All destinations</ButtonLink>}
             />
-            <div className="grid auto-rows-[15rem] gap-4 md:grid-cols-4 md:auto-rows-[14rem]">
+            <div className="reveal-group grid auto-rows-[15rem] gap-4 md:grid-cols-4 md:auto-rows-[14rem]">
               {mosaicFill.map((d, i) => (
                 <DestinationTile
                   key={d.id}
@@ -225,13 +258,13 @@ export default async function HomePage() {
       {/* 13. Experiences */}
       <section className="py-20 md:py-28">
         <div className="container-page space-y-12">
-          <SectionHeading title="Travel the way you like to travel" lede="Most trips mix a few of these. Tell us which matter most and we'll balance the route around them." />
-          <ul className="grid gap-8 sm:grid-cols-2 lg:grid-cols-5">
+          <SectionHeading eyebrow="Experiences" title="Travel the way you like to travel" lede="Most trips mix a few of these. Tell us which matter most and we'll balance the route around them." />
+          <ul className="reveal-group grid gap-8 sm:grid-cols-2 lg:grid-cols-5">
             {EXPERIENCES.map((e) => (
               <li key={e.category}>
                 <Link href={`/tours?category=${e.category}`} className="group block">
-                  <span className="relative block aspect-[3/4] overflow-hidden rounded-sm bg-ivory-deep">
-                    <Image src={e.image} alt={e.alt} fill sizes="(min-width: 1024px) 18vw, (min-width: 640px) 45vw, 92vw" className="object-cover transition-transform duration-700 group-hover:scale-[1.04]" />
+                  <span className="lift relative block aspect-[3/4] overflow-hidden rounded-sm bg-ivory-deep">
+                    <Image src={e.image} alt={e.alt} fill sizes="(min-width: 1024px) 18vw, (min-width: 640px) 45vw, 92vw" className="object-cover transition-transform duration-1000 ease-[var(--ease-out-soft)] group-hover:scale-[1.08]" />
                   </span>
                   <span className="mt-4 block font-display text-xl text-teal-900 group-hover:text-teal-700">{e.name}</span>
                   <span className="mt-1 block text-[0.95rem] text-muted">{e.line}</span>
@@ -245,10 +278,11 @@ export default async function HomePage() {
       {/* 11. Airport transfers & private transport */}
       <section className="bg-teal-50/60 py-20 md:py-28">
         <div className="container-page grid gap-12 lg:grid-cols-2 lg:items-center">
-          <div className="relative aspect-[5/4] overflow-hidden rounded-sm">
+          <div className="reveal relative aspect-[5/4] overflow-hidden rounded-sm">
             <Image src="https://images.unsplash.com/photo-1704797390325-b057758d8c3d" alt="A tuk tuk parked in front of the lighthouse at Galle" fill sizes="(min-width: 1024px) 45vw, 100vw" className="object-cover" />
           </div>
-          <div className="space-y-6">
+          <div className="reveal space-y-6">
+            <p className="eyebrow">Transfers & chauffeur</p>
             <h2 className="text-[clamp(2rem,3.6vw,3.1rem)] text-teal-900">Getting around, taken care of</h2>
             <p className="text-lg text-muted">
               From the moment you land at Colombo to your last beach day, travel with a private vehicle and a driver who knows the roads.
@@ -299,8 +333,9 @@ export default async function HomePage() {
       <section className="bg-ivory py-20 md:py-28">
         <div className="container-page grid gap-16 lg:grid-cols-2">
           <div className="space-y-10">
-            <h2 className="text-[clamp(2rem,3.6vw,3.1rem)] text-teal-900">Why travel with Lanka Veya</h2>
-            <dl className="space-y-7">
+            <p className="eyebrow">Why us</p>
+            <h2 className="-mt-6 text-[clamp(2rem,3.6vw,3.1rem)] text-teal-900">Why travel with Lanka Veya</h2>
+            <dl className="reveal-group space-y-7">
               {REASONS.map((r) => (
                 <div key={r.title} className="border-l-2 border-champagne pl-5">
                   <dt className="font-display text-xl text-teal-900">{r.title}</dt>
@@ -310,8 +345,9 @@ export default async function HomePage() {
             </dl>
           </div>
           <div className="space-y-10">
-            <h2 className="text-[clamp(2rem,3.6vw,3.1rem)] text-teal-900">How booking works</h2>
-            <ol className="space-y-8">
+            <p className="eyebrow">Three simple steps</p>
+            <h2 className="-mt-6 text-[clamp(2rem,3.6vw,3.1rem)] text-teal-900">How booking works</h2>
+            <ol className="reveal-group space-y-8">
               {STEPS.map((s, i) => (
                 <li key={s.title} className="grid grid-cols-[3rem_1fr] gap-4">
                   <span className="font-display text-4xl leading-none text-champagne-700" aria-hidden>
@@ -340,8 +376,8 @@ export default async function HomePage() {
           <div className="container-page space-y-10">
             {testimonials.length ? (
               <>
-                <SectionHeading title="From our travellers" />
-                <div className="grid gap-8 md:grid-cols-3">
+                <SectionHeading eyebrow="Reviews" title="From our travellers" />
+                <div className="reveal-group grid gap-8 md:grid-cols-3">
                   {testimonials.slice(0, 3).map((t) => (
                     <figure key={t.id} className="flex flex-col justify-between border-t border-champagne pt-6">
                       <blockquote className="font-display text-xl leading-snug text-teal-900">&ldquo;{t.body}&rdquo;</blockquote>
@@ -381,6 +417,7 @@ export default async function HomePage() {
         <section className="py-20 md:py-24">
           <div className="container-page grid gap-12 lg:grid-cols-[1fr_2fr]">
             <div className="space-y-4">
+              <p className="eyebrow">Questions</p>
               <h2 className="text-[clamp(2rem,3.6vw,3.1rem)] text-teal-900">Good to know</h2>
               <Link href="/faq" className="text-teal-700 underline underline-offset-4">All questions</Link>
             </div>

@@ -17,7 +17,7 @@ export function DestinationTile({ destination, className, sizes = "(min-width: 1
           alt={destination.cover_image_alt ?? ""}
           fill
           sizes={sizes}
-          className="object-cover transition-transform duration-700 ease-[var(--ease-out-soft)] group-hover:scale-[1.04]"
+          className="object-cover transition-transform duration-1000 ease-[var(--ease-out-soft)] group-hover:scale-[1.08]"
         />
       ) : null}
       <span className="absolute inset-0 bg-gradient-to-t from-teal-950/85 via-teal-950/10 to-transparent" aria-hidden />
