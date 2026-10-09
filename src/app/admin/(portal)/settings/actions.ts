@@ -21,7 +21,10 @@ const SCHEMAS = {
     response_time_note: text(200),
     domain: text(120),
   }),
-  hero: z.object({ headline: z.string().trim().min(1).max(120), subheading: text(300), image_url: zUrl, image_alt: text(250), image_credit: text(200) }),
+  hero: z.object({
+    headline: z.string().trim().min(1).max(120), subheading: text(300), image_url: zUrl, image_alt: text(250), image_credit: text(200),
+    video_url: zUrl.refine((v) => v === "" || /^https:\/\/[^\s]+\.(mp4|webm)(\?[^\s]*)?$/i.test(v), "Use a direct https link to an .mp4 or .webm file."),
+  }),
   social: z.object({ facebook: zUrl, instagram: zUrl, tiktok: zUrl, youtube: zUrl }),
   platforms: z.object({
     tripadvisor_url: zUrl, tripadvisor_review_url: zUrl, google_business_url: zUrl, google_review_url: zUrl, google_maps_url: zUrl,

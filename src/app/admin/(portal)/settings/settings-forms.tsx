@@ -46,6 +46,14 @@ export function HeroForm({ v }: { v: V }) {
         <TextField name="image_alt" label="Image description" defaultValue={s(v, "image_alt")} />
         <TextField name="image_credit" label="Photo credit" defaultValue={s(v, "image_credit")} />
       </div>
+      <TextField
+        name="video_url"
+        type="url"
+        label="Hero video (optional)"
+        hint="A direct https link to a short, silent .mp4 or .webm loop (10–20 s, under 8 MB, landscape). Plays over the photos; leave empty to show the moving photos only."
+        defaultValue={s(v, "video_url")}
+        placeholder="https://…/sri-lanka-hero.mp4"
+      />
     </SettingForm>
   );
 }
