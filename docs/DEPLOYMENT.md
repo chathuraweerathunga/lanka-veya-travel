@@ -25,7 +25,7 @@ Target: **Vercel** (app) + **Supabase** (database, auth, storage). Nothing in th
 2. Apply the schema. Either:
    - **CLI (recommended):** `npx supabase login && npx supabase link --project-ref <ref> && npx supabase db push`
    - **SQL editor:** run each file in `supabase/migrations/` in filename order.
-3. Load production-safe starter content: run `supabase/seed.sql` in the SQL editor. **Do not** run `seed-dev.sql` in production (it contains sample tours and vehicles).
+3. Load production-safe starter content: run `supabase/seed.sql` in the SQL editor. Then run `supabase/seed-tours.sql` for the starter tour packages (all "price on request"; edit or unpublish them in Admin → Tours). **Do not** run `seed-dev.sql` in production (it contains sample tours and vehicles).
 4. Storage: migration `20261009000300_storage.sql` creates the public `media` bucket (5 MB, JPEG/PNG/WebP/AVIF). Confirm it under *Storage*.
 5. Check *Database → Advisors* for security/performance warnings and confirm RLS is enabled on every table in `public` (it is in the migrations).
 

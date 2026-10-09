@@ -26,6 +26,10 @@ export const metadata: Metadata = {
     template: "%s | Lanka Veya Travel",
   },
   applicationName: "Lanka Veya Travel",
+  openGraph: { siteName: "Lanka Veya Travel", locale: "en_GB", type: "website", images: ["/og"] },
+  twitter: { card: "summary_large_image" },
+  // Google Search Console "HTML tag" verification: set GOOGLE_SITE_VERIFICATION to the content value.
+  verification: process.env.GOOGLE_SITE_VERIFICATION ? { google: process.env.GOOGLE_SITE_VERIFICATION } : undefined,
 };
 
 export const viewport: Viewport = {

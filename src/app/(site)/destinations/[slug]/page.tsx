@@ -28,7 +28,7 @@ export async function generateMetadata({ params }: PageProps<"/destinations/[slu
     title,
     description,
     alternates: { canonical: `/destinations/${d.slug}` },
-    openGraph: { title, description, images: d.cover_image_url ? [d.cover_image_url] : [] },
+    openGraph: { title, description, images: [d.cover_image_url || "/og"] },
   };
 }
 

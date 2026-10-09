@@ -23,7 +23,7 @@ export async function generateMetadata(): Promise<Metadata> {
     title: { absolute: s.seo.default_title },
     description: s.seo.default_description,
     alternates: { canonical: "/" },
-    openGraph: { title: s.seo.default_title, description: s.seo.default_description, images: s.seo.og_image_url ? [s.seo.og_image_url] : [], type: "website" },
+    openGraph: { title: s.seo.default_title, description: s.seo.default_description, images: [s.seo.og_image_url || "/og"], type: "website" },
   };
 }
 
