@@ -18,6 +18,7 @@ import { whatsappLink, whatsappMessages } from "@/lib/whatsapp";
 import { getSiteUrl } from "@/lib/env";
 import { formatDate } from "@/lib/utils";
 import { MARK_ISLAND } from "@/components/site/wordmark";
+import { CountUp, ParallaxBand, PictureGallery, type GalleryItem } from "@/components/site/scroll-showcase";
 
 export async function generateMetadata(): Promise<Metadata> {
   const s = await getPublicSettings();
@@ -69,6 +70,18 @@ const EXPERIENCES = [
   },
 ];
 
+const GALLERY: GalleryItem[] = [
+  { place: "Sigiriya", line: "The 5th-century Lion Rock fortress, rising out of the forest.", image: "https://images.unsplash.com/photo-1612862862126-865765df2ded", alt: "Aerial view of the Sigiriya rock fortress rising above dense green forest", credit: "Photo: Dylan Shaw / Unsplash", href: "/destinations/sigiriya" },
+  { place: "Ella", line: "The hill-country railway, crossing bridges through the forest.", image: "https://images.unsplash.com/photo-1578519050142-afb511e518de", alt: "A train crossing a bridge through the forest near Ella", credit: "Photo: Anton Lecock / Unsplash", href: "/destinations/ella" },
+  { place: "Kandy", line: "Home of the Temple of the Sacred Tooth Relic.", image: "https://images.unsplash.com/photo-1665849050332-8d5d7e59afb6", alt: "A white building with a gold roof beside the Temple of the Tooth in Kandy", credit: "Photo: Chathura Anuradha Subasinghe / Unsplash", href: "/destinations/kandy" },
+  { place: "Yala", line: "Leopards, elephants and sloth bears in the dry south-east.", image: "https://images.unsplash.com/photo-1621847473222-d85c022cbf07", alt: "A leopard standing in water in Yala National Park", credit: "Photo: Udara Karunarathna / Unsplash", href: "/destinations/yala" },
+  { place: "Nuwara Eliya", line: "Cool air and endless tea estates in the central highlands.", image: "https://images.unsplash.com/photo-1708338914870-797de586672d", alt: "A lush green hillside covered in trees in the Nuwara Eliya region", credit: "Photo: Juho S / Unsplash", href: "/destinations/nuwara-eliya" },
+  { place: "Galle", line: "Ramparts, lanes and the lighthouse of the old Dutch fort.", image: "https://images.unsplash.com/photo-1568843240915-b512cc9b4415", alt: "The white lighthouse at Galle Fort", credit: "Photo: Shainee Fernando / Unsplash", href: "/destinations/galle" },
+  { place: "Dambulla", line: "Cave temples filled with ancient Buddhist murals and statues.", image: "https://images.unsplash.com/photo-1656497107500-a2bc32cbe7d4", alt: "A large statue in front of the temple building at Dambulla", credit: "Photo: Secret Travel Guide / Unsplash", href: "/destinations/dambulla" },
+  { place: "Mirissa", line: "Palm-fringed bays and whale watching in season.", image: "https://images.unsplash.com/photo-1580910527739-556eb89f9d65", alt: "Palm trees along the beach shore at Mirissa", credit: "Photo: Dinuka Lankaloka / Unsplash", href: "/destinations/mirissa" },
+  { place: "Arugam Bay", line: "The east coast's surf town, at its best from May to September.", image: "https://images.unsplash.com/photo-1552055568-f8c4fb8c6320", alt: "Aerial view of fishing boats on the shore at Arugam Bay", credit: "Photo: Tomáš Malík / Unsplash", href: "/destinations/arugam-bay" },
+];
+
 const REASONS = [
   { title: "Private, never shared", body: "Your vehicle and driver are for your group only, on your schedule." },
   { title: "Planned around you", body: "Every itinerary starts from your dates, pace and interests, not a fixed departure." },
@@ -83,14 +96,16 @@ const STEPS = [
 ];
 
 export default async function HomePage() {
-  const [settings, featured, destinations, faqs, testimonials, vehicles] = await Promise.all([
+  const [settings, featured, destinations, faqs, testimonials, vehicles, allTours] = await Promise.all([
     getPublicSettings(),
     getTours({ featured: true }),
     getDestinations(),
     getFaqs({ homeOnly: true }),
     getTestimonials(),
     getPublicVehicles(),
+    getTours(),
   ]);
+  const tourCount = allTours.length;
   const b = settings.business;
   const hero = settings.hero;
   const wa = whatsappLink(b.whatsapp, whatsappMessages.general());
@@ -230,6 +245,25 @@ export default async function HomePage() {
         </div>
       </section>
 
+      {/* Parallax band with island facts */}
+      <ParallaxBand
+        image="https://images.unsplash.com/photo-1519566335946-e6f65f0f4fdf"
+        alt="Stilt fishermen on wooden poles in the shallow coastal waters of Sri Lanka"
+        credit="Photo: Daniel Klein / Unsplash"
+      >
+        <div className="reveal max-w-3xl space-y-6">
+          <p className="eyebrow">Serendib</p>
+          <p className="font-display text-[clamp(2.2rem,4.6vw,4rem)] font-[320] leading-[1.06] text-white">
+            The island whose old name, Serendib, <span className="italic text-champagne">gave the world the word serendipity.</span>
+          </p>
+        </div>
+        <div className="grid gap-10 sm:grid-cols-3">
+          <CountUp value={8} label="UNESCO World Heritage Sites, from Sigiriya to Galle Fort" />
+          {destinations.length ? <CountUp value={destinations.length} label="destinations we know road by road" /> : null}
+          {tourCount ? <CountUp value={tourCount} label="signature routes to start your journey from" /> : null}
+        </div>
+      </ParallaxBand>
+
       {/* 10. Destinations mosaic */}
       {mosaicFill.length ? (
         <section className="bg-ivory py-20 md:py-28">
@@ -263,7 +297,7 @@ export default async function HomePage() {
             {EXPERIENCES.map((e) => (
               <li key={e.category}>
                 <Link href={`/tours?category=${e.category}`} className="group block">
-                  <span className="lift relative block aspect-[3/4] overflow-hidden rounded-sm bg-ivory-deep">
+                  <span className="lift img-unveil relative block aspect-[3/4] overflow-hidden rounded-sm bg-ivory-deep">
                     <Image src={e.image} alt={e.alt} fill sizes="(min-width: 1024px) 18vw, (min-width: 640px) 45vw, 92vw" className="object-cover transition-transform duration-1000 ease-[var(--ease-out-soft)] group-hover:scale-[1.08]" />
                   </span>
                   <span className="mt-4 block font-display text-xl text-teal-900 group-hover:text-teal-700">{e.name}</span>
@@ -275,10 +309,13 @@ export default async function HomePage() {
         </div>
       </section>
 
+      {/* Horizontal picture gallery */}
+      <PictureGallery eyebrow="Sri Lanka in pictures" title="Scroll through the island" items={GALLERY} />
+
       {/* 11. Airport transfers & private transport */}
       <section className="bg-teal-50/60 py-20 md:py-28">
         <div className="container-page grid gap-12 lg:grid-cols-2 lg:items-center">
-          <div className="reveal relative aspect-[5/4] overflow-hidden rounded-sm">
+          <div className="img-unveil img-unveil-zoom relative aspect-[5/4] overflow-hidden rounded-sm">
             <Image src="https://images.unsplash.com/photo-1704797390325-b057758d8c3d" alt="A tuk tuk parked in front of the lighthouse at Galle" fill sizes="(min-width: 1024px) 45vw, 100vw" className="object-cover" />
           </div>
           <div className="reveal space-y-6">
