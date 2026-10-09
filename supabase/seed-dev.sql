@@ -28,7 +28,7 @@ values
  'https://images.unsplash.com/photo-1580910527739-556eb89f9d65', 'Palm trees on the beach at Mirissa', 'Photo: Dinuka Lankaloka / Unsplash',
  'South coast beaches & Yala safari private tour', 'Six days between Galle, Mirissa and Yala with a private driver, planned around you.',
  true, 'published', 2),
-('ella-day-trip-from-kandy', 'Kandy to Ella by Train',
+('kandy-to-ella-train-with-luggage-transfer', 'Kandy to Ella by Train',
  'Ride the famous hill-country railway while your driver carries your luggage by road.',
  'One of the world''s most scenic train journeys, with your driver meeting you at Ella station.',
  array['scenic-train', 'day-trip', 'hill-country'], 1, 0,
@@ -48,7 +48,7 @@ select t.id, d.id, x.pos from (values
   ('cultural-triangle-and-hill-country', 'ella', 5),
   ('south-coast-beaches-and-yala', 'galle', 1), ('south-coast-beaches-and-yala', 'mirissa', 2),
   ('south-coast-beaches-and-yala', 'yala', 3),
-  ('ella-day-trip-from-kandy', 'kandy', 1), ('ella-day-trip-from-kandy', 'ella', 2)
+  ('kandy-to-ella-train-with-luggage-transfer', 'kandy', 1), ('kandy-to-ella-train-with-luggage-transfer', 'ella', 2)
 ) as x(tour_slug, dest_slug, pos)
 join public.tours t on t.slug = x.tour_slug
 join public.destinations d on d.slug = x.dest_slug
@@ -69,7 +69,7 @@ select t.id, x.day, x.title, x.descr, x.overnight from (values
   ('south-coast-beaches-and-yala', 4, 'To Yala', 'Afternoon drive east toward Tissamaharama.', 'Tissamaharama'),
   ('south-coast-beaches-and-yala', 5, 'Yala safari', 'Early jeep safari, then return west.', 'South coast'),
   ('south-coast-beaches-and-yala', 6, 'Departure', 'Transfer to Colombo or the airport.', null),
-  ('ella-day-trip-from-kandy', 1, 'Kandy to Ella', 'Station drop-off, the train through the tea country and pickup at Ella.', null)
+  ('kandy-to-ella-train-with-luggage-transfer', 1, 'Kandy to Ella', 'Station drop-off, the train through the tea country and pickup at Ella.', null)
 ) as x(tour_slug, day, title, descr, overnight)
 join public.tours t on t.slug = x.tour_slug
 on conflict do nothing;
