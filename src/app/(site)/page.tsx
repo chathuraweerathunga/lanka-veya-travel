@@ -18,6 +18,7 @@ import { whatsappLink, whatsappMessages } from "@/lib/whatsapp";
 import { getSiteUrl } from "@/lib/env";
 import { formatDate } from "@/lib/utils";
 import { MARK_ISLAND } from "@/components/site/wordmark";
+import { HERO_SLIDE_CREDIT, HeroMedia } from "@/components/site/hero-media";
 import { CountUp, ParallaxBand, PictureGallery, type GalleryItem } from "@/components/site/scroll-showcase";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -142,7 +143,7 @@ export default async function HomePage() {
 
       {/* 1–8. Hero with quote panel */}
       <section className="on-dark relative isolate min-h-[100svh] overflow-hidden bg-teal-950 text-white">
-        <Image src={hero.image_url} alt={hero.image_alt} fill preload sizes="100vw" className="hero-zoom -z-20 object-cover" />
+        <HeroMedia image={hero.image_url} alt={hero.image_alt} videoUrl={hero.video_url || undefined} />
         <div className="absolute inset-0 -z-10 bg-[linear-gradient(100deg,rgba(11,39,38,0.88)_0%,rgba(11,39,38,0.55)_45%,rgba(11,39,38,0.15)_100%)]" aria-hidden />
         <div className="absolute inset-x-0 bottom-0 -z-10 h-1/2 bg-gradient-to-t from-teal-950/80 to-transparent" aria-hidden />
         <svg className="pointer-events-none absolute right-[8%] top-[14%] -z-10 hidden h-[62%] text-champagne lg:block" viewBox="0 0 160 420" fill="none" aria-hidden>
@@ -173,7 +174,7 @@ export default async function HomePage() {
                 </a>
               ) : null}
             </div>
-            {hero.image_credit ? <p className="text-xs text-white/55">{hero.image_credit}</p> : null}
+            <p className="text-xs text-white/55">{[hero.image_credit, HERO_SLIDE_CREDIT].filter(Boolean).join(" · ")}</p>
           </div>
           <div className="rise" style={delay("0.95s")}>
             <QuickQuotePanel />

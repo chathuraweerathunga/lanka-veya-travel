@@ -14,7 +14,7 @@ export type BusinessSettings = {
   response_time_note: string;
   domain: string;
 };
-export type HeroSettings = { headline: string; subheading: string; image_url: string; image_alt: string; image_credit: string };
+export type HeroSettings = { headline: string; subheading: string; image_url: string; image_alt: string; image_credit: string; video_url: string };
 export type SocialSettings = { facebook: string; instagram: string; tiktok: string; youtube: string };
 export type PlatformSettings = {
   tripadvisor_url: string;
@@ -62,6 +62,7 @@ export const DEFAULT_SETTINGS: PublicSettings = {
     image_url: "https://images.unsplash.com/photo-1566296314736-6eaac1ca0cb9",
     image_alt: "A blue train crossing the Nine Arches Bridge near Ella, surrounded by forest",
     image_credit: "Photo: Hendrik Cornelissen / Unsplash",
+    video_url: "",
   },
   social: { facebook: "", instagram: "", tiktok: "", youtube: "" },
   platforms: {
