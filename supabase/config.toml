@@ -1,0 +1,45 @@
+# Supabase CLI configuration (for `supabase start` local development and
+# `supabase db push`). Hosted projects: mirror the [auth] values in the
+# dashboard (Authentication → URL Configuration / Sign In / Email Templates).
+project_id = "lanka-veya-travel"
+
+[api]
+enabled = true
+port = 54321
+schemas = ["public"]
+extra_search_path = ["public", "extensions"]
+max_rows = 1000
+
+[db]
+port = 54322
+major_version = 17
+
+[db.seed]
+enabled = true
+sql_paths = ["./seed.sql", "./seed-dev.sql"]
+
+[storage]
+enabled = true
+file_size_limit = "5MiB"
+
+[auth]
+enabled = true
+site_url = "http://localhost:3000"
+additional_redirect_urls = ["http://localhost:3000/admin/auth/confirm", "https://lankaveyatravel.com/admin/auth/confirm"]
+jwt_expiry = 3600
+# No public registration: team members are invited from Admin → Team.
+enable_signup = false
+minimum_password_length = 12
+
+[auth.email]
+enable_signup = false
+double_confirm_changes = true
+enable_confirmations = true
+
+[auth.email.template.invite]
+subject = "You're invited to the Lanka Veya Travel owner portal"
+content_path = "./supabase/templates/invite.html"
+
+[auth.email.template.recovery]
+subject = "Reset your Lanka Veya Travel portal password"
+content_path = "./supabase/templates/recovery.html"

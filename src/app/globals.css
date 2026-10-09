@@ -1,26 +1,151 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+/* ------------------------------------------------------------------
+   Lanka Veya Travel — design tokens
+   Deep teal carries the brand; white is the main surface; warm ivory
+   marks editorial sections; champagne is reserved for hairlines, the
+   route motif and small accents. Palm green labels categories.
+   ------------------------------------------------------------------ */
+@theme {
+  --color-teal-950: #0b2726;
+  --color-teal-900: #123f3d;
+  --color-teal-800: #155451;
+  --color-teal-700: #176b65;
+  --color-teal-100: #dcebe8;
+  --color-teal-50: #eef5f3;
+  --color-ivory: #f7f4ec;
+  --color-ivory-deep: #efe9dc;
+  --color-palm: #7d9278;
+  --color-palm-700: #4f6449;
+  --color-champagne: #c7ae7b;
+  --color-champagne-700: #826b3e;
+  --color-ink: #202b29;
+  --color-muted: #68736f;
+  --color-line: #e2ddd1;
+  --color-danger: #a3362a;
+  --color-success: #2f6b4f;
+  --color-warning: #8a6116;
+
+  --font-display: var(--font-fraunces), "Iowan Old Style", Georgia, serif;
+  --font-sans: var(--font-figtree), ui-sans-serif, system-ui, sans-serif;
+
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 14px;
+
+  --ease-out-soft: cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+    text-rendering: optimizeLegibility;
+  }
+  body {
+    background: #fff;
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    font-size: 1.0625rem;
+    line-height: 1.6;
+  }
+  h1,
+  h2,
+  h3,
+  .font-display {
+    font-family: var(--font-display);
+    font-optical-sizing: auto;
+    font-weight: 380;
+    letter-spacing: -0.015em;
+    line-height: 1.08;
+    text-wrap: balance;
+  }
+  p {
+    text-wrap: pretty;
+  }
+  :focus-visible {
+    outline: 2px solid var(--color-teal-700);
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
+  .on-dark :focus-visible,
+  .on-dark:focus-visible {
+    outline-color: var(--color-champagne);
+  }
+  ::selection {
+    background: var(--color-teal-100);
+    color: var(--color-teal-950);
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@layer components {
+  .container-page {
+    width: 100%;
+    max-width: 78rem;
+    margin-inline: auto;
+    padding-inline: 1.25rem;
+  }
+  @media (min-width: 768px) {
+    .container-page {
+      padding-inline: 2rem;
+    }
+  }
+  .prose-travel {
+    max-width: 68ch;
+    color: var(--color-ink);
+  }
+  .prose-travel p + p {
+    margin-top: 1rem;
+  }
+  .prose-travel h2 {
+    font-size: 1.75rem;
+    margin: 2.5rem 0 0.75rem;
+  }
+  .prose-travel h3 {
+    font-size: 1.3rem;
+    margin: 1.75rem 0 0.5rem;
+  }
+  .prose-travel ul {
+    list-style: disc;
+    padding-left: 1.25rem;
+    margin: 0.75rem 0;
+  }
+  .prose-travel li + li {
+    margin-top: 0.35rem;
+  }
+  .prose-travel a {
+    color: var(--color-teal-700);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  /* The route line: a dashed champagne path, the brand's one signature motif. */
+  .route-draw {
+    stroke-dasharray: 6 7;
+    animation: route-draw 2.6s var(--ease-out-soft) 0.4s both;
+  }
+}
+
+@keyframes route-draw {
+  from {
+    stroke-dashoffset: 520;
+    opacity: 0;
+  }
+  15% {
+    opacity: 1;
+  }
+  to {
+    stroke-dashoffset: 0;
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
