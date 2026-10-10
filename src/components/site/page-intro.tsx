@@ -48,7 +48,7 @@ export function SectionHeading({ title, lede, action, eyebrow, className }: { ti
     <div className={`reveal flex flex-col gap-4 md:flex-row md:items-end md:justify-between ${className ?? ""}`}>
       <div className="max-w-2xl space-y-3">
         {eyebrow ? <p className="eyebrow">{eyebrow}</p> : null}
-        <h2 className="text-[clamp(2rem,3.6vw,3.1rem)] text-teal-900">{title}</h2>
+        <h2 className="mask-reveal text-[clamp(2rem,3.6vw,3.1rem)] text-teal-900"><span>{title}</span></h2>
         {lede ? <p className="text-lg text-muted">{lede}</p> : null}
       </div>
       {action}

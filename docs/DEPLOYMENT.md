@@ -11,13 +11,13 @@ Target: **Vercel** (app) + **Supabase** (database, auth, storage). Nothing in th
 | `supabase/finish-setup.sql` (privilege hardening, `save_quotation_draft`, `save_tour`) | Applied |
 | Vercel project `lanka-veya-travel` (functions in `bom1`) with public env vars + `RATE_LIMIT_SALT` | Created |
 | Vercel ↔ GitHub connection (`main` → Production) | Connected |
-| Production live at <https://lanka-veya-travel.vercel.app> (`NEXT_PUBLIC_SITE_URL` set to it, `ALLOW_INDEXING=true` on Production) | Live |
+| Production live at <https://lankaveyatravel.com> (`NEXT_PUBLIC_SITE_URL` set to it, `ALLOW_INDEXING=true` on Production); `www` 308-redirects to the apex; `lanka-veya-travel.vercel.app` still serves | Live |
 | `SUPABASE_SECRET_KEY` in Vercel (Production + Preview, *Sensitive*) | Set |
 | Supabase Auth settings (sign-ups off, redirect URLs, templates) | **To do** — see below |
 | Resend domain + `RESEND_API_KEY` | **To do** |
 | First owner account (lankaveyatravel@gmail.com, active owner) | Created — change the temporary password at `/admin/auth/set-password` after first sign-in |
-| Custom domain `lankaveyatravel.com` | Not bought (available, $11.25/yr in Vercel); site uses the free vercel.app address for now |
-| Google Search Console + sitemap `https://lanka-veya-travel.vercel.app/sitemap.xml` | **To do** |
+| Custom domain `lankaveyatravel.com` (registered at Cloudflare; DNS at Cloudflare: `A @ 76.76.21.21` and `CNAME www cname.vercel-dns.com`, both **DNS only**, grey cloud) | Connected |
+| Google Search Console + sitemap `https://lankaveyatravel.com/sitemap.xml` | **To do** |
 
 ## 1. Supabase project
 

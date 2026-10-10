@@ -46,6 +46,7 @@ export function SiteHeader({ whatsappHref }: { whatsappHref: string | null }) {
         scrolled && !transparent && "shadow-[0_10px_30px_-20px_rgba(11,39,38,0.35)]",
       )}
     >
+      <span className="scroll-progress pointer-events-none absolute inset-x-0 bottom-0 h-[2px] bg-champagne" aria-hidden />
       <div className="container-page flex h-[76px] items-center justify-between gap-6">
         <Link href="/" aria-label="Lanka Veya Travel home" className="shrink-0">
           <Wordmark tone={transparent ? "light" : "dark"} animated />
