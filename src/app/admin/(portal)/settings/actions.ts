@@ -4,6 +4,7 @@ import { z } from "zod";
 import { adminAction, checkWrite, zUrl } from "@/lib/admin/action";
 import { audit } from "@/lib/audit";
 import { refreshPublicSite } from "@/lib/admin/revalidate";
+import { mapEmbedFromInput } from "@/lib/map-location";
 
 const text = (max: number) => z.string().trim().max(max).optional().transform((v) => v ?? "");
 const email = z.string().trim().toLowerCase().optional().transform((v) => v ?? "").refine((v) => v === "" || /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(v), "Enter a valid email.");
@@ -29,7 +30,7 @@ const SCHEMAS = {
   platforms: z.object({
     tripadvisor_url: zUrl, tripadvisor_review_url: zUrl, google_business_url: zUrl, google_review_url: zUrl, google_maps_url: zUrl,
     booking_com_url: zUrl, viator_url: zUrl, getyourguide_url: zUrl,
-    google_map_embed_url: zUrl.refine((v) => v === "" || /^https:\/\/(www\.)?google\.com\/maps\//i.test(v), "Paste the src link from Google Maps → Share → Embed a map (starts with https://www.google.com/maps/embed)."),
+    google_map_embed_url: z.string().trim().max(2000).optional().transform((v) => v ?? "").refine((v) => v === "" || mapEmbedFromInput(v) !== null, "Paste coordinates like 6.9271, 79.8612, a full Google Maps link to your place, or the Embed a map link. Short maps.app.goo.gl links can't be used here."),
   }),
   seo: z.object({ default_title: z.string().trim().min(1).max(70), default_description: text(170), og_image_url: zUrl }),
   currency: z.object({ default: z.string().regex(/^[A-Z]{3}$/), display: z.string().optional().transform((v) => (v ?? "").split(",").map((s) => s.trim().toUpperCase()).filter((s) => /^[A-Z]{3}$/.test(s))) }),

@@ -58,12 +58,12 @@ export function HeroForm({ v }: { v: V }) {
   );
 }
 
-export function LinksForm({ settingKey, v, fields }: { settingKey: string; v: V; fields: [string, string, string?][] }) {
+export function LinksForm({ settingKey, v, fields }: { settingKey: string; v: V; fields: [string, string, string?, ("url" | "text")?][] }) {
   return (
     <SettingForm settingKey={settingKey}>
       <div className="grid gap-4 md:grid-cols-2">
-        {fields.map(([k, label, hint]) => (
-          <TextField key={k} name={k} type="url" label={label} hint={hint ?? (s(v, k) ? undefined : "Not configured: hidden on the website")} defaultValue={s(v, k)} placeholder="https://" />
+        {fields.map(([k, label, hint, type = "url"]) => (
+          <TextField key={k} name={k} type={type} label={label} hint={hint ?? (s(v, k) ? undefined : "Not configured: hidden on the website")} defaultValue={s(v, k)} placeholder={type === "url" ? "https://" : undefined} />
         ))}
       </div>
     </SettingForm>

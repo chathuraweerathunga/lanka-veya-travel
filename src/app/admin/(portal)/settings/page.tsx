@@ -44,7 +44,7 @@ export default async function SettingsPage() {
               ["booking_com_url", "Booking.com listing or approved affiliate link"],
               ["viator_url", "Viator listing"],
               ["getyourguide_url", "GetYourGuide listing"],
-              ["google_map_embed_url", "Website map (optional)", "For an exact pin: Google Maps → your listing → Share → Embed a map → copy only the https://www.google.com/maps/embed?… link. Empty = the map searches for your business name."],
+              ["google_map_embed_url", "Website map: exact location", "Shows only your pin. On your phone: open Google Maps, press and hold on your business location, and copy the numbers shown (e.g. 6.9271, 79.8612). A full google.com/maps link or an Embed a map link also works. Empty = a Find us on Google Maps card.", "text"],
             ]}
           />
         </Panel>
