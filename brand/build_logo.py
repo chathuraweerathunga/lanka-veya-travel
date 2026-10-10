@@ -16,8 +16,8 @@ def load(name, axes):
     b = io.BytesIO(); f.save(b); data = b.getvalue()
     return TTFont(io.BytesIO(data)), data
 
-SERIF = load("fraunces-latin-opsz-normal", {"opsz": 72, "wght": 420})
-SANS = load("figtree-latin-wght-normal", {"wght": 600})
+SERIF = load("inter-latin-opsz-normal", {"opsz": 32, "wght": 600})  # Inter Display for the name
+SANS = load("inter-latin-opsz-normal", {"opsz": 14, "wght": 600})
 
 def text(font, txt, size, x, y, tracking=0.0):
     """Returns (svg path d, width) for txt with its baseline at y, starting at x. tracking in em."""
@@ -60,7 +60,7 @@ def horizontal(fg, sub, island, sun, bg=None, uid="h"):
     tx = pad + mw + 30
     ch = cap_height(SERIF, name_size)
     name_base = pad + mh * 0.52
-    d1, w1 = text(SERIF, "Lanka Veya", name_size, tx, name_base, -0.01)
+    d1, w1 = text(SERIF, "Lanka Veya", name_size, tx, name_base, -0.035)
     sub_base = name_base + 22 + cap_height(SANS, sub_size)
     d2, w2 = text(SANS, "TRAVEL", sub_size, tx + 3, sub_base, 0.42)
     rule_y = sub_base - cap_height(SANS, sub_size) / 2
@@ -73,12 +73,12 @@ def horizontal(fg, sub, island, sun, bg=None, uid="h"):
 def stacked(fg, sub, island, sun, bg=None, uid="s"):
     pad, mh = 40, 170
     name_size, sub_size = 72, 18
-    _, w1 = text(SERIF, "Lanka Veya", name_size, 0, 0, -0.01)
+    _, w1 = text(SERIF, "Lanka Veya", name_size, 0, 0, -0.035)
     _, w2 = text(SANS, "TRAVEL", sub_size, 0, 0, 0.42)
     W = max(w1, w2 + 120) + pad * 2
     mw = mh * 100 / 150
     name_base = pad + mh + 36 + cap_height(SERIF, name_size)
-    d1, _ = text(SERIF, "Lanka Veya", name_size, (W - w1) / 2, name_base, -0.01)
+    d1, _ = text(SERIF, "Lanka Veya", name_size, (W - w1) / 2, name_base, -0.035)
     sub_base = name_base + 24 + cap_height(SANS, sub_size)
     d2, _ = text(SANS, "TRAVEL", sub_size, (W - w2) / 2, sub_base, 0.42)
     ry = sub_base - cap_height(SANS, sub_size) / 2 - 0.75

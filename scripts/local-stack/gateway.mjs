@@ -58,6 +58,32 @@ function storage(req, res) {
     res.writeHead(403, { "content-type": "application/json" });
     return res.end(JSON.stringify({ message: "local storage emulator only accepts service_role" }));
   }
+  const list = rest.match(/^\/object\/list\/([^/]+)$/);
+  if (list && req.method === "POST") {
+    const chunks = [];
+    req.on("data", (c) => chunks.push(c));
+    req.on("end", () => {
+      const { prefix = "", limit = 100, sortBy } = JSON.parse(Buffer.concat(chunks).toString() || "{}");
+      const dir = path.join(STORAGE_DIR, list[1], prefix);
+      const out = [];
+      if (dir.startsWith(STORAGE_DIR) && fs.existsSync(dir)) {
+        for (const name of fs.readdirSync(dir)) {
+          if (name.endsWith(".meta")) continue;
+          const full = path.join(dir, name);
+          const st = fs.statSync(full);
+          out.push(
+            st.isDirectory()
+              ? { name, id: null, created_at: null, updated_at: null, metadata: null }
+              : { name, id: crypto.randomUUID(), created_at: st.mtime.toISOString(), updated_at: st.mtime.toISOString(), metadata: { size: st.size } },
+          );
+        }
+      }
+      out.sort((a, b) => (sortBy?.order === "desc" ? b.name.localeCompare(a.name) : a.name.localeCompare(b.name)));
+      res.writeHead(200, { "content-type": "application/json" });
+      res.end(JSON.stringify(out.slice(0, limit)));
+    });
+    return;
+  }
   const obj = rest.match(/^\/object\/([^/]+)\/(.+)$/);
   if (obj && (req.method === "POST" || req.method === "PUT")) {
     const file = path.join(STORAGE_DIR, obj[1], decodeURIComponent(obj[2]));

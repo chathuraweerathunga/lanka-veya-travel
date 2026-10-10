@@ -26,8 +26,8 @@
   --color-success: #2f6b4f;
   --color-warning: #8a6116;
 
-  --font-display: var(--font-fraunces), "Iowan Old Style", Georgia, serif;
-  --font-sans: var(--font-figtree), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
 
   --radius-sm: 4px;
   --radius-md: 8px;
@@ -45,6 +45,7 @@
     background: #fff;
     color: var(--color-ink);
     font-family: var(--font-sans);
+    font-feature-settings: "cv11", "ss03";
     font-size: 1.0625rem;
     line-height: 1.6;
   }
@@ -54,9 +55,9 @@
   .font-display {
     font-family: var(--font-display);
     font-optical-sizing: auto;
-    font-weight: 380;
-    letter-spacing: -0.015em;
-    line-height: 1.08;
+    font-weight: 600;
+    letter-spacing: -0.032em;
+    line-height: 1.06;
     text-wrap: balance;
   }
   p {
@@ -138,6 +139,58 @@
     opacity: 1;
   }
 }
+
+/* ------------------------------------------------------------------
+   Dark theme for the public site (html[data-theme="dark"], set before first
+   paint in the root layout). The admin portal has no .site-shell and stays
+   light. Shared colour variables are redefined where they only ever mean
+   "surface" or "text"; utilities whose colour doubles as text and background
+   (teal-900, white, ivory) are remapped class by class.
+   ------------------------------------------------------------------ */
+html[data-theme="dark"]:has(.site-shell) {
+  color-scheme: dark;
+}
+html[data-theme="dark"]:has(.site-shell) body {
+  background: #0d1615;
+  color: #dbe4e1;
+}
+[data-theme="dark"] .site-shell {
+  --color-ink: #dbe4e1;
+  --color-muted: #9aaba6;
+  --color-line: rgb(255 255 255 / 0.1);
+  --color-teal-50: #14211f;
+  --color-teal-100: #1d3532;
+  --color-teal-700: #6cc1b5;
+  --color-champagne-700: #d6bf8f;
+  --color-palm-700: #a4bb9f;
+  --color-ivory-deep: #1b2826;
+}
+[data-theme="dark"] .site-shell .bg-white { background-color: #101b1a; }
+[data-theme="dark"] .site-shell .bg-white\/90,
+[data-theme="dark"] .site-shell .bg-white\/95 { background-color: rgb(13 22 21 / 0.88); }
+[data-theme="dark"] .site-shell .bg-ivory { background-color: #121e1d; }
+[data-theme="dark"] .site-shell .bg-teal-50\/60 { background-color: #111c1b; }
+[data-theme="dark"] .site-shell .text-teal-900 { color: #f1f5f4; }
+[data-theme="dark"] .site-shell .text-teal-800 { color: #d3e2df; }
+[data-theme="dark"] .site-shell .border-teal-900,
+[data-theme="dark"] .site-shell .border-teal-900\/15,
+[data-theme="dark"] .site-shell .border-teal-900\/25 { border-color: rgb(255 255 255 / 0.18); }
+[data-theme="dark"] .site-shell .hover\:bg-ivory:hover,
+[data-theme="dark"] .site-shell .hover\:bg-teal-50:hover { background-color: #1a2a28; }
+[data-theme="dark"] .site-shell .hover\:border-teal-700:hover { border-color: #6cc1b5; }
+[data-theme="dark"] .site-shell .hover\:border-teal-900:hover { border-color: #f1f5f4; }
+[data-theme="dark"] .site-shell .hover\:bg-teal-900:hover { background-color: #f1f5f4; }
+[data-theme="dark"] .site-shell .hover\:bg-teal-900:hover.hover\:text-white { color: #0d1615; }
+[data-theme="dark"] .site-shell .group:hover .group-hover\:text-teal-700,
+[data-theme="dark"] .site-shell .hover\:text-teal-700:hover { color: #8fd3c9; }
+/* Primary buttons and dark bands keep the brand teal, lifted slightly off the page. */
+[data-theme="dark"] .site-shell .bg-teal-900 { background-color: #174a47; }
+[data-theme="dark"] .site-shell .hover\:bg-teal-800:hover { background-color: #1d5c58; }
+[data-theme="dark"] .site-shell .bg-teal-950 { background-color: #081110; }
+[data-theme="dark"] .site-shell .lift { box-shadow: none; }
+[data-theme="dark"] .site-shell .group:hover .lift { box-shadow: 0 28px 56px -28px rgb(0 0 0 / 0.8); }
+[data-theme="dark"] .site-shell ::selection { background: #1d5c58; color: #fff; }
+[data-theme="dark"] .site-shell iframe[title*="Google Maps"] { filter: invert(0.9) hue-rotate(180deg) saturate(0.6) brightness(0.95); }
 
 /* ------------------------------------------------------------------
    Motion. Entrance animations are pure CSS so they run before hydration;
@@ -258,17 +311,93 @@
   transform: none;
 }
 
+/* 3D tilt: [data-tilt] cards follow the pointer (see TiltEffects) with a soft
+   glare from .tilt-glare. Uses the transform property, so tilt sits on the card
+   and .lift sits on the photo inside it. */
+[data-tilt] {
+  transform: perspective(1100px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg));
+  transition: transform 0.7s var(--ease-out-soft);
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+[data-tilt][data-tilting] {
+  transition-duration: 0.12s;
+}
+.tilt-glare {
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  opacity: 0;
+  background: radial-gradient(circle at var(--gx, 50%) var(--gy, 50%), rgb(255 255 255 / 0.28), transparent 55%);
+  mix-blend-mode: soft-light;
+  transition: opacity 0.5s var(--ease-out-soft);
+}
+[data-tilting] .tilt-glare {
+  opacity: 1;
+}
+
+/* Depth: the photo drifts inside its frame as the frame scrolls past. Uses the
+   translate property so it composes with hover zoom (scale). */
+.depth-img img {
+  scale: 1.1;
+}
+@supports (animation-timeline: view()) {
+  .depth-img img {
+    animation: depth-drift linear both;
+    animation-timeline: view();
+    animation-range: cover 0% cover 100%;
+  }
+}
+@keyframes depth-drift {
+  from { translate: 0 -4%; }
+  to { translate: 0 4%; }
+}
+
 /* Moving-photo hero: each slide fades in over the last with a slow zoom,
-   on a 24-second loop (three slides, 6 s apart, over the owner's photo). */
+   6 s apart over the owner's photo; one keyframe set per slide count (1–5). */
 .hero-slide {
   opacity: 0;
-  animation: hero-slide 24s linear infinite both;
+  animation: hero-slide-3 24s linear infinite both;
 }
-@keyframes hero-slide {
+.hero-slide[data-count="1"] { animation-name: hero-slide-1; animation-duration: 12s; }
+@keyframes hero-slide-1 {
   0% { opacity: 0; transform: scale(1.12); }
-  5% { opacity: 1; }
-  25% { opacity: 1; }
-  30% { opacity: 0; transform: scale(1); }
+  10.00% { opacity: 1; }
+  50.00% { opacity: 1; }
+  60.00% { opacity: 0; transform: scale(1); }
+  100% { opacity: 0; transform: scale(1); }
+}
+.hero-slide[data-count="2"] { animation-name: hero-slide-2; animation-duration: 18s; }
+@keyframes hero-slide-2 {
+  0% { opacity: 0; transform: scale(1.12); }
+  6.67% { opacity: 1; }
+  33.33% { opacity: 1; }
+  40.00% { opacity: 0; transform: scale(1); }
+  100% { opacity: 0; transform: scale(1); }
+}
+.hero-slide[data-count="3"] { animation-name: hero-slide-3; animation-duration: 24s; }
+@keyframes hero-slide-3 {
+  0% { opacity: 0; transform: scale(1.12); }
+  5.00% { opacity: 1; }
+  25.00% { opacity: 1; }
+  30.00% { opacity: 0; transform: scale(1); }
+  100% { opacity: 0; transform: scale(1); }
+}
+.hero-slide[data-count="4"] { animation-name: hero-slide-4; animation-duration: 30s; }
+@keyframes hero-slide-4 {
+  0% { opacity: 0; transform: scale(1.12); }
+  4.00% { opacity: 1; }
+  20.00% { opacity: 1; }
+  24.00% { opacity: 0; transform: scale(1); }
+  100% { opacity: 0; transform: scale(1); }
+}
+.hero-slide[data-count="5"] { animation-name: hero-slide-5; animation-duration: 36s; }
+@keyframes hero-slide-5 {
+  0% { opacity: 0; transform: scale(1.12); }
+  3.33% { opacity: 1; }
+  16.67% { opacity: 1; }
+  20.00% { opacity: 0; transform: scale(1); }
   100% { opacity: 0; transform: scale(1); }
 }
 .hero-video {
@@ -292,9 +421,13 @@
   .reveal-group > :nth-child(5) { animation-range: entry 24% cover 38%; }
   .reveal-group > :nth-child(n + 6) { animation-range: entry 28% cover 40%; }
 }
+/* Individual transform properties, so the reveal composes with [data-tilt]. */
+.reveal-group {
+  perspective: 1200px;
+}
 @keyframes reveal {
-  from { opacity: 0; transform: translateY(48px); }
-  to { opacity: 1; transform: none; }
+  from { opacity: 0; translate: 0 56px; rotate: x 16deg; scale: 0.96; }
+  to { opacity: 1; translate: 0 0; rotate: x 0deg; scale: 1; }
 }
 
 /* Eyebrow label with a gold rule that draws in. */
@@ -482,7 +615,9 @@
   .hero-video { display: none; }
   .mask-rise > span,
   .mask-reveal > span,
-  .route-v { animation: none !important; }
+  .route-v,
+  .depth-img img { animation: none !important; }
+  [data-tilt] { transform: none !important; }
   .scroll-progress { display: none !important; }
   .hscroll { height: auto !important; }
   .hscroll-sticky { position: static !important; height: auto !important; padding-block: 5rem !important; }

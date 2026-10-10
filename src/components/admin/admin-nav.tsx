@@ -5,13 +5,13 @@ import { usePathname } from "next/navigation";
 import { useState } from "react";
 import {
   BarChart3, Bell, CalendarCheck, Car, FileText, Globe, History, Inbox, LayoutDashboard, LogOut, Map, Menu,
-  Settings, Tags, UserCog, Users, UserRound, X,
+  Settings, Tags, UserCog, Users, UserRound, X, Images, GalleryHorizontal,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { LogoMark } from "@/components/site/wordmark";
 
 type Item = { href: string; label: string; icon: keyof typeof ICONS; minRole?: "admin" | "owner" };
-const ICONS = { LayoutDashboard, CalendarCheck, Inbox, Users, Map, Globe, Car, UserRound, Tags, FileText, Settings, BarChart3, History, Bell, UserCog };
+const ICONS = { LayoutDashboard, CalendarCheck, Inbox, Users, Map, Globe, Car, UserRound, Tags, FileText, Settings, BarChart3, History, Bell, UserCog, Images, GalleryHorizontal };
 
 export const ADMIN_NAV: { group: string; items: Item[] }[] = [
   {
@@ -36,6 +36,8 @@ export const ADMIN_NAV: { group: string; items: Item[] }[] = [
     items: [
       { href: "/admin/tours", label: "Tours", icon: "Map" },
       { href: "/admin/destinations", label: "Destinations", icon: "Globe" },
+      { href: "/admin/photos", label: "Website photos", icon: "GalleryHorizontal", minRole: "admin" },
+      { href: "/admin/media", label: "Media library", icon: "Images" },
       { href: "/admin/content", label: "Content & FAQs", icon: "FileText" },
       { href: "/admin/settings", label: "Settings & links", icon: "Settings", minRole: "admin" },
     ],

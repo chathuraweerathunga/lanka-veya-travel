@@ -14,8 +14,9 @@ export function durationLabel(t: Pick<TourSummary, "duration_days" | "duration_n
 export function TourCard({ tour, priority = false }: { tour: TourSummary; priority?: boolean }) {
   const duration = durationLabel(tour);
   return (
-    <article className="group relative flex flex-col">
-      <div className="lift card-frame relative aspect-[4/5] overflow-hidden rounded-sm bg-ivory-deep">
+    <article className="group relative flex flex-col" data-tilt>
+      <div className="lift card-frame depth-img relative aspect-[4/5] overflow-hidden rounded-md bg-ivory-deep">
+        <span className="tilt-glare" aria-hidden />
         {tour.cover_image_url ? (
           <Image
             src={tour.cover_image_url}

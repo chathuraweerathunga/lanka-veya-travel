@@ -7,6 +7,7 @@ import { Menu, MessageCircle, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Wordmark } from "./wordmark";
 import { PRIMARY_NAV } from "./nav";
+import { ThemeToggle } from "./theme-toggle";
 
 export function SiteHeader({ whatsappHref }: { whatsappHref: string | null }) {
   const pathname = usePathname();
@@ -52,8 +53,8 @@ export function SiteHeader({ whatsappHref }: { whatsappHref: string | null }) {
           <Wordmark tone={transparent ? "light" : "dark"} animated />
         </Link>
 
-        <nav aria-label="Main" className="hidden lg:block">
-          <ul className="flex items-center gap-7 text-[0.94rem]">
+        <nav aria-label="Main" className="hidden min-[1120px]:block">
+          <ul className="flex items-center gap-5 whitespace-nowrap text-[0.9rem] xl:gap-7 xl:text-[0.94rem]">
             {PRIMARY_NAV.map((item) => {
               const active = pathname === item.href || pathname.startsWith(`${item.href}/`);
               return (
@@ -76,24 +77,25 @@ export function SiteHeader({ whatsappHref }: { whatsappHref: string | null }) {
         </nav>
 
         <div className="flex items-center gap-2">
+          <ThemeToggle className={transparent ? "text-white hover:bg-white/10" : "text-teal-900 hover:bg-teal-50"} />
           {whatsappHref ? (
             <a
               href={whatsappHref}
               target="_blank"
               rel="noopener noreferrer"
               className={cn(
-                "hidden sm:inline-flex items-center gap-2 h-10 px-3 rounded-md text-sm transition-colors",
+                "hidden sm:inline-flex items-center gap-2 h-10 px-3 rounded-md text-sm whitespace-nowrap transition-colors",
                 transparent ? "text-white hover:bg-white/10" : "text-teal-900 hover:bg-teal-50",
               )}
             >
               <MessageCircle className="size-4" aria-hidden />
-              WhatsApp
+              <span className="min-[1120px]:max-xl:sr-only">WhatsApp</span>
             </a>
           ) : null}
           <Link
             href="/plan-my-trip"
             className={cn(
-              "hidden md:inline-flex items-center h-10 px-4 rounded-md text-sm font-medium transition-colors",
+              "hidden md:inline-flex items-center h-10 px-4 rounded-md text-sm font-medium whitespace-nowrap transition-colors",
               transparent ? "bg-champagne text-teal-950 hover:bg-[#d4bd8e]" : "bg-teal-900 text-white hover:bg-teal-800",
             )}
           >
@@ -101,7 +103,7 @@ export function SiteHeader({ whatsappHref }: { whatsappHref: string | null }) {
           </Link>
           <button
             type="button"
-            className={cn("lg:hidden inline-flex size-10 items-center justify-center rounded-md", transparent ? "text-white" : "text-teal-900")}
+            className={cn("min-[1120px]:hidden inline-flex size-10 items-center justify-center rounded-md", transparent ? "text-white" : "text-teal-900")}
             aria-expanded={open}
             aria-controls="mobile-menu"
             onClick={() => setOpen((v) => !v)}
@@ -112,7 +114,7 @@ export function SiteHeader({ whatsappHref }: { whatsappHref: string | null }) {
         </div>
       </div>
 
-      <div id="mobile-menu" hidden={!open} className="lg:hidden border-t border-line bg-white">
+      <div id="mobile-menu" hidden={!open} className="min-[1120px]:hidden border-t border-line bg-white">
         <nav aria-label="Mobile" className="container-page py-6">
           <ul className="space-y-1">
             {PRIMARY_NAV.map((item) => (

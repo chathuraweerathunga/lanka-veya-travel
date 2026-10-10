@@ -2,6 +2,7 @@ import Script from "next/script";
 import { SiteHeader } from "@/components/site/site-header";
 import { SiteFooter } from "@/components/site/site-footer";
 import { WhatsAppFloat } from "@/components/site/whatsapp-float";
+import { TiltEffects } from "@/components/site/tilt-effects";
 import { getPublicSettings } from "@/lib/data/settings";
 import { whatsappLink, whatsappMessages } from "@/lib/whatsapp";
 
@@ -14,7 +15,7 @@ export default async function SiteLayout({ children }: LayoutProps<"/">) {
   const ga = settings.analytics.ga_measurement_id?.trim();
 
   return (
-    <>
+    <div className="site-shell contents">
       <a href="#main" className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:rounded-md focus:bg-white focus:px-4 focus:py-2 focus:text-teal-900">
         Skip to content
       </a>
@@ -24,6 +25,7 @@ export default async function SiteLayout({ children }: LayoutProps<"/">) {
       </main>
       <SiteFooter settings={settings} />
       <WhatsAppFloat href={wa} />
+      <TiltEffects />
       {plausible && /^[a-z0-9.-]+$/i.test(plausible) ? (
         <Script defer data-domain={plausible} src="https://plausible.io/js/script.js" strategy="afterInteractive" />
       ) : null}
@@ -35,6 +37,6 @@ export default async function SiteLayout({ children }: LayoutProps<"/">) {
           </Script>
         </>
       ) : null}
-    </>
+    </div>
   );
 }
