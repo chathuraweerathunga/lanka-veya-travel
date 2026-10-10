@@ -5,25 +5,14 @@ import { safeExternalUrl } from "@/lib/data/settings";
 import { whatsappLink, whatsappMessages } from "@/lib/whatsapp";
 import { FOOTER_NAV } from "./nav";
 import { LogoMark, Wordmark } from "./wordmark";
+import { SocialIcons, socialProfiles } from "./social-links";
 
 export function platformLinks(settings: PublicSettings) {
   const p = settings.platforms;
   return [
-    { label: "Tripadvisor", href: safeExternalUrl(p.tripadvisor_url) },
-    { label: "Google", href: safeExternalUrl(p.google_business_url) },
     { label: "Viator", href: safeExternalUrl(p.viator_url) },
     { label: "GetYourGuide", href: safeExternalUrl(p.getyourguide_url) },
     { label: "Booking.com", href: safeExternalUrl(p.booking_com_url) },
-  ].filter((l): l is { label: string; href: string } => !!l.href);
-}
-
-export function socialLinks(settings: PublicSettings) {
-  const s = settings.social;
-  return [
-    { label: "Facebook", href: safeExternalUrl(s.facebook) },
-    { label: "Instagram", href: safeExternalUrl(s.instagram) },
-    { label: "TikTok", href: safeExternalUrl(s.tiktok) },
-    { label: "YouTube", href: safeExternalUrl(s.youtube) },
   ].filter((l): l is { label: string; href: string } => !!l.href);
 }
 
@@ -31,7 +20,7 @@ export function SiteFooter({ settings }: { settings: PublicSettings }) {
   const b = settings.business;
   const wa = whatsappLink(b.whatsapp, whatsappMessages.general());
   const platforms = platformLinks(settings);
-  const social = socialLinks(settings);
+  const profiles = socialProfiles(settings, { whatsapp: true });
 
   return (
     <footer className="on-dark relative isolate mt-auto overflow-hidden bg-teal-950 text-white/80">
@@ -57,6 +46,7 @@ export function SiteFooter({ settings }: { settings: PublicSettings }) {
             ) : null}
             {b.address ? <li className="text-white/70">{b.address}</li> : null}
           </ul>
+          <SocialIcons profiles={profiles} tone="light" className="pt-1" />
         </div>
 
         <FooterColumn title="Explore" links={FOOTER_NAV.explore} />
@@ -64,30 +54,16 @@ export function SiteFooter({ settings }: { settings: PublicSettings }) {
         <FooterColumn title="Company" links={FOOTER_NAV.company} />
       </div>
 
-      {platforms.length || social.length ? (
+      {platforms.length ? (
         <div className="border-t border-white/10">
-          <div className="container-page flex flex-col gap-4 py-6 text-sm md:flex-row md:items-center md:justify-between">
-            {platforms.length ? (
-              <p className="flex flex-wrap items-center gap-x-5 gap-y-2">
-                <span className="text-white/60">Find us on</span>
-                {platforms.map((l) => (
-                  <a key={l.label} href={l.href} target="_blank" rel="noopener noreferrer" className="hover:text-white underline-offset-4 hover:underline">
-                    {l.label}
-                  </a>
-                ))}
-              </p>
-            ) : <span />}
-            {social.length ? (
-              <p className="flex flex-wrap items-center gap-x-5 gap-y-2">
-                <span className="text-white/60">Follow</span>
-                {social.map((l) => (
-                  <a key={l.label} href={l.href} target="_blank" rel="noopener noreferrer me" className="hover:text-white underline-offset-4 hover:underline">
-                    {l.label}
-                  </a>
-                ))}
-              </p>
-            ) : null}
-          </div>
+          <p className="container-page flex flex-wrap items-center gap-x-5 gap-y-2 py-6 text-sm">
+            <span className="text-white/60">Also find us on</span>
+            {platforms.map((l) => (
+              <a key={l.label} href={l.href} target="_blank" rel="noopener noreferrer" className="hover:text-white underline-offset-4 hover:underline">
+                {l.label}
+              </a>
+            ))}
+          </p>
         </div>
       ) : null}
 

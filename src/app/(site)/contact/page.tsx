@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { Mail, MapPin, MessageCircle, Phone } from "lucide-react";
 import { PageIntro } from "@/components/site/page-intro";
 import { ContactForm } from "@/components/forms/contact-form";
+import { SocialIcons, socialProfiles } from "@/components/site/social-links";
+import { LocationMap } from "@/components/site/location-map";
 import { getPublicSettings, safeExternalUrl } from "@/lib/data/settings";
 import { whatsappLink, whatsappMessages } from "@/lib/whatsapp";
 
@@ -16,6 +18,7 @@ export default async function ContactPage() {
   const b = s.business;
   const wa = whatsappLink(b.whatsapp, whatsappMessages.general());
   const maps = safeExternalUrl(s.platforms.google_maps_url);
+  const profiles = socialProfiles(s);
   return (
     <>
       <PageIntro title="Contact us" lede="WhatsApp is usually the quickest way to reach us. You can also email or send a message below." crumbs={[{ href: "/contact", label: "Contact" }]} />
@@ -61,12 +64,22 @@ export default async function ContactPage() {
             ) : null}
           </ul>
           {b.response_time_note ? <p className="text-muted">{b.response_time_note}</p> : null}
+          {profiles.length ? (
+            <div className="space-y-3 border-t border-line pt-6">
+              <p className="font-medium text-teal-900">Follow us</p>
+              <SocialIcons profiles={profiles} />
+            </div>
+          ) : null}
         </aside>
         <div>
           <h2 className="mb-6 text-3xl text-teal-900">Send a message</h2>
           <ContactForm />
         </div>
       </div>
+      <section className="container-page pb-16 md:pb-24" aria-labelledby="map-heading">
+        <h2 id="map-heading" className="mb-6 text-3xl text-teal-900">Find us</h2>
+        <LocationMap settings={s} />
+      </section>
     </>
   );
 }

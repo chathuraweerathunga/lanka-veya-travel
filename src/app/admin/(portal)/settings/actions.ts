@@ -29,6 +29,7 @@ const SCHEMAS = {
   platforms: z.object({
     tripadvisor_url: zUrl, tripadvisor_review_url: zUrl, google_business_url: zUrl, google_review_url: zUrl, google_maps_url: zUrl,
     booking_com_url: zUrl, viator_url: zUrl, getyourguide_url: zUrl,
+    google_map_embed_url: zUrl.refine((v) => v === "" || /^https:\/\/(www\.)?google\.com\/maps\//i.test(v), "Paste the src link from Google Maps → Share → Embed a map (starts with https://www.google.com/maps/embed)."),
   }),
   seo: z.object({ default_title: z.string().trim().min(1).max(70), default_description: text(170), og_image_url: zUrl }),
   currency: z.object({ default: z.string().regex(/^[A-Z]{3}$/), display: z.string().optional().transform((v) => (v ?? "").split(",").map((s) => s.trim().toUpperCase()).filter((s) => /^[A-Z]{3}$/.test(s))) }),

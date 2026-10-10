@@ -25,6 +25,7 @@ export type PlatformSettings = {
   booking_com_url: string;
   viator_url: string;
   getyourguide_url: string;
+  google_map_embed_url: string;
 };
 export type SeoSettings = { default_title: string; default_description: string; og_image_url: string };
 export type CurrencySettings = { default: string; display: string[] };
@@ -74,6 +75,7 @@ export const DEFAULT_SETTINGS: PublicSettings = {
     booking_com_url: "",
     viator_url: "",
     getyourguide_url: "",
+    google_map_embed_url: "",
   },
   seo: {
     default_title: "Lanka Veya Travel — Sri Lanka private tours & transfers",
