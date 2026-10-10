@@ -33,3 +33,17 @@ Inter (Inter Display SemiBold for "Lanka Veya", Inter SemiBold for TRAVEL), unde
 
 ## Rebuilding
 `pip install fonttools brotli uharfbuzz && python3 brand/build_logo.py . brand/logo` regenerates the SVGs.
+
+## Social media set (`social/`)
+
+| File | Size | Use |
+|---|---|---|
+| `profile-teal.png` | 1080 × 1080 | **Main profile picture** with the name: WhatsApp Business, Instagram, Facebook, TikTok, Google Business, Tripadvisor |
+| `profile-ivory.png` | 1080 × 1080 | Light alternative of the same |
+| `profile-symbol-teal.png` | 1080 × 1080 | Symbol only, for places that show the picture very small |
+| `facebook-cover.png` | 1640 × 624 | Facebook page cover (content kept clear of the profile-picture overlap and the mobile crop) |
+| `banner-wide.png` | 1500 × 500 | X, LinkedIn, YouTube channel art, email headers |
+| `story-status.png` | 1080 × 1920 | WhatsApp Status, Instagram and Facebook Stories |
+| `preview-circle-crop.png` | | How the profile pictures look in the circle crop |
+
+All names and the logo sit inside the circle-safe area, so platforms that crop to a circle never cut them. Rebuild with `node brand/build_social.mjs` (the WhatsApp number and website are at the top of the script).
