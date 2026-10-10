@@ -242,22 +242,6 @@
   to { transform: scaleY(1); }
 }
 
-/* Follow index rows: teal fill sweeps in from the left on hover. */
-.follow-row::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  z-index: -1;
-  background: var(--color-teal-900);
-  transform: scaleX(0);
-  transform-origin: left;
-  transition: transform 0.6s var(--ease-out-soft);
-}
-.follow-row:hover::before,
-.follow-row:focus-visible::before {
-  transform: scaleX(1);
-}
-
 /* Tour card: gold frame draws inside the photo and a label slides up on hover. */
 .card-frame::after {
   content: "";

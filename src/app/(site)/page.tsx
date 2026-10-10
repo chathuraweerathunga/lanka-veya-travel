@@ -18,7 +18,8 @@ import { whatsappLink, whatsappMessages } from "@/lib/whatsapp";
 import { getSiteUrl } from "@/lib/env";
 import { formatDate } from "@/lib/utils";
 import { MARK_ISLAND } from "@/components/site/wordmark";
-import { FollowIndex, type FollowLink } from "@/components/site/follow-index";
+import { SocialIcons, socialProfiles } from "@/components/site/social-links";
+import { LocationMap } from "@/components/site/location-map";
 import { HERO_SLIDE_CREDIT, HeroMedia } from "@/components/site/hero-media";
 import { CountUp, ParallaxBand, PictureGallery, type GalleryItem } from "@/components/site/scroll-showcase";
 
@@ -115,14 +116,7 @@ export default async function HomePage() {
   const split = hero.headline.match(/^(.+?[.!?])\s+(.+)$/);
   const headline = split ? { lead: split[1], accent: split[2] } : { lead: hero.headline, accent: "" };
   const platforms = platformLinks(settings);
-  const social = settings.social;
-  const followLinks: FollowLink[] = [
-    { label: "Instagram", href: safeExternalUrl(social.instagram), detail: "@lankaveyatravel: photos and stories from our trips" },
-    { label: "TikTok", href: safeExternalUrl(social.tiktok), detail: "Short films from the road" },
-    { label: "Facebook", href: safeExternalUrl(social.facebook), detail: "News, journeys and traveller moments" },
-    { label: "YouTube", href: safeExternalUrl(social.youtube), detail: "Longer films of Sri Lanka" },
-    { label: "Google Maps", href: safeExternalUrl(settings.platforms.google_business_url || settings.platforms.google_maps_url), detail: "Find us, get directions and read reviews" },
-  ].filter((l): l is FollowLink => !!l.href);
+  const profiles = socialProfiles(settings);
   const reviewLinks = [
     { label: "Review us on Tripadvisor", href: safeExternalUrl(settings.platforms.tripadvisor_review_url) },
     { label: "Review us on Google", href: safeExternalUrl(settings.platforms.google_review_url) },
@@ -146,7 +140,7 @@ export default async function HomePage() {
           telephone: b.whatsapp_display || undefined,
           areaServed: { "@type": "Country", name: "Sri Lanka" },
           ...(b.address ? { address: b.address } : {}),
-          sameAs: [...platforms.map((p) => p.href), ...followLinks.map((l) => l.href)].filter((h, i, a) => a.indexOf(h) === i),
+          sameAs: [...platforms.map((p) => p.href), ...profiles.map((l) => l.href)].filter((h, i, a) => a.indexOf(h) === i),
         }}
       />
 
@@ -483,13 +477,12 @@ export default async function HomePage() {
         whatsappHref={wa}
       />
 
-      {/* Social & map profiles */}
-      <FollowIndex links={followLinks} />
-
       {/* 20. Contact */}
       <section className="py-20 md:py-24">
-        <div className="container-page grid gap-10 md:grid-cols-[1.2fr_1fr] md:items-center">
+        <div className="container-page grid gap-12 lg:grid-cols-[1fr_1.15fr] lg:items-start">
+          <div className="reveal space-y-8">
           <div className="space-y-3">
+            <p className="eyebrow">Contact & location</p>
             <h2 className="mask-reveal text-[clamp(2rem,3.6vw,3.1rem)] text-teal-900"><span>Talk to us</span></h2>
             <p className="max-w-lg text-lg text-muted">
               Questions before you book? Message us and we&apos;ll reply personally.
@@ -525,6 +518,14 @@ export default async function HomePage() {
               </Link>
             </li>
           </ul>
+          {profiles.length ? (
+            <div className="space-y-3 border-t border-line pt-6">
+              <p className="text-sm font-medium text-teal-900">Follow our journeys</p>
+              <SocialIcons profiles={profiles} />
+            </div>
+          ) : null}
+          </div>
+          <LocationMap settings={settings} className="reveal" />
         </div>
       </section>
     </>
