@@ -1,6 +1,7 @@
 import "server-only";
 import { cache } from "react";
 import { createPublicClient } from "@/lib/supabase/public";
+import { DEFAULT_HOME_MEDIA, type HomeMedia } from "./home-media";
 
 export type BusinessSettings = {
   name: string;
@@ -41,6 +42,7 @@ export type PublicSettings = {
   currency: CurrencySettings;
   footer: FooterSettings;
   analytics: AnalyticsSettings;
+  home_media: HomeMedia;
 };
 
 /** Values from the brief; used until/unless the owner changes them in Settings. */
@@ -89,6 +91,7 @@ export const DEFAULT_SETTINGS: PublicSettings = {
       "Lanka Veya Travel plans private journeys across Sri Lanka: tours, transfers and drivers, arranged personally and confirmed only once every detail is agreed.",
   },
   analytics: { plausible_domain: "", ga_measurement_id: "" },
+  home_media: DEFAULT_HOME_MEDIA,
 };
 
 /** Only http(s) URLs are ever rendered as external links. */

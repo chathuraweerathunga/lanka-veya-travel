@@ -29,7 +29,7 @@ export function Wordmark({ className, tone = "dark", animated = false }: { class
     <span className={cn("group/wordmark inline-flex items-center gap-3", tone === "light" ? "text-white" : "text-teal-900", className)}>
       <LogoMark animated={animated} className={tone === "light" ? "text-ivory" : undefined} />
       <span className="flex flex-col leading-none">
-        <span className="font-display text-[1.5rem] tracking-[-0.01em]" style={{ fontVariationSettings: '"opsz" 72', fontWeight: 420 }}>
+        <span className="font-display text-[1.4rem] font-semibold tracking-[-0.035em]">
           Lanka Veya
         </span>
         <span className={cn("mt-1.5 flex items-center gap-2 text-[0.62rem] font-semibold tracking-[0.42em]", tone === "light" ? "text-champagne" : "text-champagne-700")}>

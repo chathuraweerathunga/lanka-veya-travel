@@ -3,19 +3,14 @@ import localFont from "next/font/local";
 import { getSiteUrl } from "@/lib/env";
 import "./globals.css";
 
-// Self-hosted (SIL Open Font License, see ./fonts) — no third-party font requests.
-const fraunces = localFont({
+// Inter (variable, with optical sizes), self-hosted under the SIL Open Font License (see ./fonts).
+// At headline sizes the opsz axis switches to Inter Display automatically.
+const inter = localFont({
   src: [
-    { path: "./fonts/fraunces-latin-opsz-normal.woff2", style: "normal", weight: "100 900" },
-    { path: "./fonts/fraunces-latin-opsz-italic.woff2", style: "italic", weight: "100 900" },
+    { path: "./fonts/inter-latin-opsz-normal.woff2", style: "normal", weight: "100 900" },
+    { path: "./fonts/inter-latin-opsz-italic.woff2", style: "italic", weight: "100 900" },
   ],
-  variable: "--font-fraunces",
-  display: "swap",
-});
-
-const figtree = localFont({
-  src: [{ path: "./fonts/figtree-latin-wght-normal.woff2", style: "normal", weight: "300 900" }],
-  variable: "--font-figtree",
+  variable: "--font-inter",
   display: "swap",
 });
 
@@ -32,13 +27,19 @@ export const metadata: Metadata = {
   verification: process.env.GOOGLE_SITE_VERIFICATION ? { google: process.env.GOOGLE_SITE_VERIFICATION } : undefined,
 };
 
+const THEME_SCRIPT = `(function(){try{var t=localStorage.getItem("theme");if(t!=="light"&&t!=="dark"){t=matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light"}document.documentElement.dataset.theme=t}catch(e){}})()`;
+
 export const viewport: Viewport = {
   themeColor: "#123f3d",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="en" className={`${fraunces.variable} ${figtree.variable} antialiased`}>
+    <html lang="en" className={`${inter.variable} antialiased`} suppressHydrationWarning>
+      <head>
+        {/* Applies the saved or system theme before first paint, so there is no flash. */}
+        <script dangerouslySetInnerHTML={{ __html: THEME_SCRIPT }} />
+      </head>
       <body className="min-h-dvh flex flex-col">{children}</body>
     </html>
   );

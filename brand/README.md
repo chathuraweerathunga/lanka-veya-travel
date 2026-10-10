@@ -24,7 +24,7 @@ SVGs are pure vector (lettering converted to outlines), so they scale to any siz
 | Ivory | `#f7f4ec` |
 
 ## Typefaces
-Fraunces (lettering "Lanka Veya") and Figtree (TRAVEL), both under the SIL Open Font License; see `src/app/fonts/`.
+Inter (Inter Display SemiBold for "Lanka Veya", Inter SemiBold for TRAVEL), under the SIL Open Font License; see `src/app/fonts/`.
 
 ## Rules
 - Keep clear space around the logo at least the width of the sun dot ×2.

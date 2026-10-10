@@ -9,7 +9,8 @@ export function DestinationTile({ destination, className, sizes = "(min-width: 1
   return (
     <Link
       href={`/destinations/${destination.slug}`}
-      className={cn("group on-dark relative block overflow-hidden rounded-sm bg-teal-900 text-white", className)}
+      data-tilt
+      className={cn("group on-dark depth-img relative block overflow-hidden rounded-md bg-teal-900 text-white", className)}
     >
       {destination.cover_image_url ? (
         <Image
@@ -20,6 +21,7 @@ export function DestinationTile({ destination, className, sizes = "(min-width: 1
           className="object-cover transition-transform duration-1000 ease-[var(--ease-out-soft)] group-hover:scale-[1.08]"
         />
       ) : null}
+      <span className="tilt-glare" aria-hidden />
       <span className="absolute inset-0 bg-gradient-to-t from-teal-950/85 via-teal-950/10 to-transparent" aria-hidden />
       <span className="absolute inset-x-0 bottom-0 p-5 md:p-6">
         {destination.region ? <span className="block text-sm text-white/75">{destination.region}</span> : null}

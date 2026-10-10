@@ -10,21 +10,21 @@ export const dynamic = "force-static";
 export async function GET() {
   // Static TTF instances of the brand fonts (Satori can't read variable woff2).
   const dir = join(process.cwd(), "src/app/og");
-  const [serif, sans] = await Promise.all([readFile(join(dir, "fraunces-og.ttf")), readFile(join(dir, "figtree-og.ttf"))]);
+  const [display, text] = await Promise.all([readFile(join(dir, "inter-display-og.ttf")), readFile(join(dir, "inter-og.ttf"))]);
   return new ImageResponse(
     (
-      <div style={{ width: "100%", height: "100%", display: "flex", flexDirection: "column", justifyContent: "space-between", padding: 80, background: "#0b2726", color: "#ffffff", position: "relative", fontFamily: "Figtree" }}>
+      <div style={{ width: "100%", height: "100%", display: "flex", flexDirection: "column", justifyContent: "space-between", padding: 80, background: "#0b2726", color: "#ffffff", position: "relative", fontFamily: "Inter" }}>
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img src={MARK} width={300} height={437} alt="" style={{ position: "absolute", right: 90, top: 96 }} />
         <div style={{ display: "flex", flexDirection: "column" }}>
-          <div style={{ fontFamily: "Fraunces", fontSize: 84, letterSpacing: -1.5 }}>Lanka Veya</div>
+          <div style={{ fontFamily: "Inter Display", fontSize: 84, letterSpacing: -3 }}>Lanka Veya</div>
           <div style={{ display: "flex", alignItems: "center", marginTop: 10 }}>
             <div style={{ fontSize: 24, letterSpacing: 10, color: "#c7ae7b" }}>TRAVEL</div>
             <div style={{ width: 150, height: 2, background: "#c7ae7b", marginLeft: 14 }} />
           </div>
         </div>
         <div style={{ display: "flex", flexDirection: "column" }}>
-          <div style={{ fontFamily: "Fraunces", fontSize: 58, lineHeight: 1.12, maxWidth: 720 }}>Private tours, transfers and chauffeur-driven journeys in Sri Lanka.</div>
+          <div style={{ fontFamily: "Inter Display", fontSize: 56, lineHeight: 1.1, letterSpacing: -1.8, maxWidth: 720 }}>Private tours, transfers and chauffeur-driven journeys in Sri Lanka.</div>
           <div style={{ marginTop: 24, fontSize: 28, color: "rgba(255,255,255,0.72)" }}>Planned around your dates, pace and interests.</div>
         </div>
       </div>
@@ -33,8 +33,8 @@ export async function GET() {
       width: 1200,
       height: 630,
       fonts: [
-        { name: "Fraunces", data: serif, style: "normal", weight: 400 },
-        { name: "Figtree", data: sans, style: "normal", weight: 500 },
+        { name: "Inter Display", data: display, style: "normal", weight: 600 },
+        { name: "Inter", data: text, style: "normal", weight: 500 },
       ],
     },
   );

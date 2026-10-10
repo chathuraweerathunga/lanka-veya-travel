@@ -48,7 +48,8 @@ export function PictureGallery({ eyebrow, title, items }: { eyebrow: string; tit
             {items.map((it, i) => {
               const inner = (
                 <>
-                  <span className="lift relative block aspect-[3/4] w-[min(72vw,24rem,42svh)] overflow-hidden rounded-sm bg-teal-900">
+                  <span className="lift relative block aspect-[3/4] w-[min(72vw,24rem,42svh)] overflow-hidden rounded-md bg-teal-900">
+                    <span className="tilt-glare" aria-hidden />
                     <Image src={it.image} alt={it.alt} fill sizes="(min-width: 768px) 24rem, 72vw" className="object-cover transition-transform duration-1000 ease-[var(--ease-out-soft)] group-hover:scale-[1.07]" />
                     <span className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-teal-950/85 to-transparent p-5 pt-16 text-white">
                       <span className="block font-display text-sm italic text-champagne">{String(i + 1).padStart(2, "0")}</span>
@@ -61,7 +62,7 @@ export function PictureGallery({ eyebrow, title, items }: { eyebrow: string; tit
               );
               return (
                 <li key={it.place} className="shrink-0">
-                  {it.href ? <Link href={it.href} className="group block">{inner}</Link> : <div className="group">{inner}</div>}
+                  {it.href ? <Link href={it.href} className="group block" data-tilt>{inner}</Link> : <div className="group" data-tilt>{inner}</div>}
                 </li>
               );
             })}
