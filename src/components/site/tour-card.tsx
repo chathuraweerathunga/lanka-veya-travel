@@ -15,7 +15,7 @@ export function TourCard({ tour, priority = false }: { tour: TourSummary; priori
   const duration = durationLabel(tour);
   return (
     <article className="group relative flex flex-col">
-      <div className="lift relative aspect-[4/5] overflow-hidden rounded-sm bg-ivory-deep">
+      <div className="lift card-frame relative aspect-[4/5] overflow-hidden rounded-sm bg-ivory-deep">
         {tour.cover_image_url ? (
           <Image
             src={tour.cover_image_url}
@@ -26,6 +26,10 @@ export function TourCard({ tour, priority = false }: { tour: TourSummary; priori
             className="object-cover transition-transform duration-1000 ease-[var(--ease-out-soft)] group-hover:scale-[1.07]"
           />
         ) : null}
+        <span className="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-teal-950/70 to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100" aria-hidden />
+        <span className="absolute bottom-6 left-6 translate-y-3 text-xs font-semibold uppercase tracking-[0.28em] text-white opacity-0 transition-all duration-500 ease-[var(--ease-out-soft)] group-hover:translate-y-0 group-hover:opacity-100" aria-hidden>
+          View itinerary →
+        </span>
       </div>
       <div className="mt-5 space-y-2">
         <p className="text-sm text-palm-700">

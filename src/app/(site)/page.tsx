@@ -18,6 +18,7 @@ import { whatsappLink, whatsappMessages } from "@/lib/whatsapp";
 import { getSiteUrl } from "@/lib/env";
 import { formatDate } from "@/lib/utils";
 import { MARK_ISLAND } from "@/components/site/wordmark";
+import { FollowIndex, type FollowLink } from "@/components/site/follow-index";
 import { HERO_SLIDE_CREDIT, HeroMedia } from "@/components/site/hero-media";
 import { CountUp, ParallaxBand, PictureGallery, type GalleryItem } from "@/components/site/scroll-showcase";
 
@@ -114,6 +115,14 @@ export default async function HomePage() {
   const split = hero.headline.match(/^(.+?[.!?])\s+(.+)$/);
   const headline = split ? { lead: split[1], accent: split[2] } : { lead: hero.headline, accent: "" };
   const platforms = platformLinks(settings);
+  const social = settings.social;
+  const followLinks: FollowLink[] = [
+    { label: "Instagram", href: safeExternalUrl(social.instagram), detail: "@lankaveyatravel: photos and stories from our trips" },
+    { label: "TikTok", href: safeExternalUrl(social.tiktok), detail: "Short films from the road" },
+    { label: "Facebook", href: safeExternalUrl(social.facebook), detail: "News, journeys and traveller moments" },
+    { label: "YouTube", href: safeExternalUrl(social.youtube), detail: "Longer films of Sri Lanka" },
+    { label: "Google Maps", href: safeExternalUrl(settings.platforms.google_business_url || settings.platforms.google_maps_url), detail: "Find us, get directions and read reviews" },
+  ].filter((l): l is FollowLink => !!l.href);
   const reviewLinks = [
     { label: "Review us on Tripadvisor", href: safeExternalUrl(settings.platforms.tripadvisor_review_url) },
     { label: "Review us on Google", href: safeExternalUrl(settings.platforms.google_review_url) },
@@ -137,7 +146,7 @@ export default async function HomePage() {
           telephone: b.whatsapp_display || undefined,
           areaServed: { "@type": "Country", name: "Sri Lanka" },
           ...(b.address ? { address: b.address } : {}),
-          sameAs: platforms.map((p) => p.href),
+          sameAs: [...platforms.map((p) => p.href), ...followLinks.map((l) => l.href)].filter((h, i, a) => a.indexOf(h) === i),
         }}
       />
 
@@ -155,9 +164,9 @@ export default async function HomePage() {
           <div className="space-y-7">
             <p className="eyebrow rise" style={delay("0.15s")}>Private journeys across Sri Lanka</p>
             <h1 className="max-w-[13ch] text-[clamp(3rem,7.4vw,6.4rem)] font-[340] leading-[0.98] text-white" style={{ fontVariationSettings: '"opsz" 144' }}>
-              <span className="rise block" style={delay("0.25s")}>{headline.lead}</span>
+              <span className="mask-rise" style={delay("0.2s")}><span>{headline.lead}</span></span>
               {headline.accent ? (
-                <span className="rise block font-[300] italic text-champagne" style={delay("0.45s")}>{headline.accent}</span>
+                <span className="mask-rise" style={delay("0.42s")}><span className="font-[300] italic text-champagne">{headline.accent}</span></span>
               ) : null}
             </h1>
             <p className="rise max-w-xl text-lg text-white/85 md:text-xl" style={delay("0.65s")}>{hero.subheading}</p>
@@ -321,7 +330,7 @@ export default async function HomePage() {
           </div>
           <div className="reveal space-y-6">
             <p className="eyebrow">Transfers & chauffeur</p>
-            <h2 className="text-[clamp(2rem,3.6vw,3.1rem)] text-teal-900">Getting around, taken care of</h2>
+            <h2 className="mask-reveal text-[clamp(2rem,3.6vw,3.1rem)] text-teal-900"><span>Getting around, taken care of</span></h2>
             <p className="text-lg text-muted">
               From the moment you land at Colombo to your last beach day, travel with a private vehicle and a driver who knows the roads.
             </p>
@@ -372,7 +381,7 @@ export default async function HomePage() {
         <div className="container-page grid gap-16 lg:grid-cols-2">
           <div className="space-y-10">
             <p className="eyebrow">Why us</p>
-            <h2 className="-mt-6 text-[clamp(2rem,3.6vw,3.1rem)] text-teal-900">Why travel with Lanka Veya</h2>
+            <h2 className="mask-reveal -mt-6 text-[clamp(2rem,3.6vw,3.1rem)] text-teal-900"><span>Why travel with Lanka Veya</span></h2>
             <dl className="reveal-group space-y-7">
               {REASONS.map((r) => (
                 <div key={r.title} className="border-l-2 border-champagne pl-5">
@@ -384,11 +393,13 @@ export default async function HomePage() {
           </div>
           <div className="space-y-10">
             <p className="eyebrow">Three simple steps</p>
-            <h2 className="-mt-6 text-[clamp(2rem,3.6vw,3.1rem)] text-teal-900">How booking works</h2>
-            <ol className="reveal-group space-y-8">
+            <h2 className="mask-reveal -mt-6 text-[clamp(2rem,3.6vw,3.1rem)] text-teal-900"><span>How booking works</span></h2>
+            <div className="steps-timeline relative">
+            <span className="route-v absolute bottom-6 left-[0.95rem] top-12 w-px" aria-hidden />
+            <ol className="reveal-group relative space-y-8">
               {STEPS.map((s, i) => (
                 <li key={s.title} className="grid grid-cols-[3rem_1fr] gap-4">
-                  <span className="font-display text-4xl leading-none text-champagne-700" aria-hidden>
+                  <span className="relative z-10 flex size-8 items-center justify-center rounded-full border border-champagne bg-ivory font-display text-lg leading-none text-champagne-700" aria-hidden>
                     {i + 1}
                   </span>
                   <div>
@@ -401,6 +412,7 @@ export default async function HomePage() {
                 </li>
               ))}
             </ol>
+            </div>
             <p className="rounded-sm bg-white p-5 text-[0.95rem] text-muted">
               Sending a request doesn&apos;t book anything or take payment. Your trip is confirmed only when we confirm it with you.
             </p>
@@ -456,7 +468,7 @@ export default async function HomePage() {
           <div className="container-page grid gap-12 lg:grid-cols-[1fr_2fr]">
             <div className="space-y-4">
               <p className="eyebrow">Questions</p>
-              <h2 className="text-[clamp(2rem,3.6vw,3.1rem)] text-teal-900">Good to know</h2>
+              <h2 className="mask-reveal text-[clamp(2rem,3.6vw,3.1rem)] text-teal-900"><span>Good to know</span></h2>
               <Link href="/faq" className="text-teal-700 underline underline-offset-4">All questions</Link>
             </div>
             <FaqList faqs={faqs} />
@@ -471,11 +483,14 @@ export default async function HomePage() {
         whatsappHref={wa}
       />
 
+      {/* Social & map profiles */}
+      <FollowIndex links={followLinks} />
+
       {/* 20. Contact */}
       <section className="py-20 md:py-24">
         <div className="container-page grid gap-10 md:grid-cols-[1.2fr_1fr] md:items-center">
           <div className="space-y-3">
-            <h2 className="text-[clamp(2rem,3.6vw,3.1rem)] text-teal-900">Talk to us</h2>
+            <h2 className="mask-reveal text-[clamp(2rem,3.6vw,3.1rem)] text-teal-900"><span>Talk to us</span></h2>
             <p className="max-w-lg text-lg text-muted">
               Questions before you book? Message us and we&apos;ll reply personally.
               {b.response_time_note ? ` ${b.response_time_note}` : ""}
