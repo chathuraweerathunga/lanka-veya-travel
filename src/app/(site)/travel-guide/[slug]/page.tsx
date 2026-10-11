@@ -49,10 +49,11 @@ export default async function GuidePage({ params }: PageProps<"/travel-guide/[sl
           headline: g.title,
           description: g.description,
           image: g.image.url,
+          datePublished: g.updated_on,
           dateModified: g.updated_on,
           mainEntityOfPage: url,
-          author: { "@type": "Organization", name: settings.business.name },
-          publisher: { "@type": "Organization", name: settings.business.name, url: getSiteUrl() },
+          author: { "@type": "Organization", name: settings.business.name, url: getSiteUrl() },
+          publisher: { "@type": "Organization", name: settings.business.name, url: getSiteUrl(), logo: { "@type": "ImageObject", url: `${getSiteUrl()}/brand/logo-square.png` } },
         }}
       />
       <PageIntro

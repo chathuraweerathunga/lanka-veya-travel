@@ -87,14 +87,32 @@ export default async function HomePage() {
       <JsonLd
         data={{
           "@context": "https://schema.org",
-          "@type": "TravelAgency",
-          name: b.name,
-          url: getSiteUrl(),
-          email: b.email || undefined,
-          telephone: b.whatsapp_display || undefined,
-          areaServed: { "@type": "Country", name: "Sri Lanka" },
-          ...(b.address ? { address: b.address } : {}),
-          sameAs: [...platforms.map((p) => p.href), ...profiles.map((l) => l.href)].filter((h, i, a) => a.indexOf(h) === i),
+          "@graph": [
+            {
+              "@type": "WebSite",
+              "@id": `${getSiteUrl()}/#website`,
+              name: b.name,
+              alternateName: "Lanka Veya",
+              url: getSiteUrl(),
+              inLanguage: "en",
+              publisher: { "@id": `${getSiteUrl()}/#business` },
+            },
+            {
+              "@type": "TravelAgency",
+              "@id": `${getSiteUrl()}/#business`,
+              name: b.name,
+              description: b.positioning || undefined,
+              slogan: b.tagline || undefined,
+              url: getSiteUrl(),
+              logo: `${getSiteUrl()}/brand/logo-square.png`,
+              image: `${getSiteUrl()}/og`,
+              email: b.email || undefined,
+              telephone: b.whatsapp_display || undefined,
+              areaServed: { "@type": "Country", name: "Sri Lanka" },
+              ...(b.address ? { address: b.address } : {}),
+              sameAs: [...platforms.map((p) => p.href), ...profiles.map((l) => l.href)].filter((h, i, a) => a.indexOf(h) === i),
+            },
+          ],
         }}
       />
 
