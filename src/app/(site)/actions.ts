@@ -11,6 +11,8 @@ import { bookingRequestSchema, contactSchema, tripRequestSchema } from "@/lib/va
 import { flattenErrors, formDataToObject, looksAutomated, type FieldErrors } from "@/lib/validation/common";
 import { sendEmail } from "@/lib/notify/email";
 import { ownerNewBookingEmail, ownerNewContactEmail, ownerNewTripRequestEmail } from "@/lib/notify/templates";
+import { setWhatsappHandoff } from "@/lib/whatsapp-handoff";
+import { bookingSummary, contactSummary, tripSummary } from "@/lib/whatsapp-summary";
 import type { SupabaseClient } from "@supabase/supabase-js";
 
 export type FormState = {
@@ -149,6 +151,7 @@ export async function submitBookingRequest(_prev: FormState, formData: FormData)
     await sendEmail({ template: "owner_new_booking", to, replyTo: input.email, relatedType: "booking", relatedId: booking.id, ...mail });
   });
 
+  await setWhatsappHandoff(booking.reference, bookingSummary(input, booking.reference, tour?.name));
   redirect(`/request-received?ref=${booking.reference}`);
 }
 
@@ -230,6 +233,7 @@ export async function submitTripRequest(_prev: FormState, formData: FormData): P
     await sendEmail({ template: "owner_new_trip_request", to, replyTo: input.email, relatedType: "trip_request", relatedId: trip.id, ...mail });
   });
 
+  await setWhatsappHandoff(trip.reference, tripSummary(input, trip.reference));
   redirect(`/request-received?ref=${trip.reference}`);
 }
 
@@ -296,5 +300,6 @@ export async function submitContact(_prev: FormState, formData: FormData): Promi
     await sendEmail({ template: "owner_new_contact", to, replyTo: input.email, relatedType: "contact_submission", relatedId: msg.id, ...mail });
   });
 
+  await setWhatsappHandoff(msg.reference, contactSummary(input, msg.reference));
   redirect(`/request-received?ref=${msg.reference}`);
 }
