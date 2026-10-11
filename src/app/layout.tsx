@@ -23,8 +23,11 @@ export const metadata: Metadata = {
   applicationName: "Lanka Veya Travel",
   openGraph: { siteName: "Lanka Veya Travel", locale: "en_GB", type: "website", images: ["/og"] },
   twitter: { card: "summary_large_image" },
-  // Google Search Console "HTML tag" verification: set GOOGLE_SITE_VERIFICATION to the content value.
-  verification: process.env.GOOGLE_SITE_VERIFICATION ? { google: process.env.GOOGLE_SITE_VERIFICATION } : undefined,
+  // Search Console / Bing Webmaster "HTML tag" verification: set these env vars to the content values.
+  verification: {
+    google: process.env.GOOGLE_SITE_VERIFICATION || undefined,
+    other: process.env.BING_SITE_VERIFICATION ? { "msvalidate.01": process.env.BING_SITE_VERIFICATION } : undefined,
+  },
 };
 
 const THEME_SCRIPT = `(function(){try{var t=localStorage.getItem("theme");if(t!=="light"&&t!=="dark"){t=matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light"}document.documentElement.dataset.theme=t}catch(e){}})()`;

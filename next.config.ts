@@ -16,6 +16,10 @@ const securityHeaders = [
   { key: "Strict-Transport-Security", value: "max-age=63072000; includeSubDomains; preload" },
 ];
 
+// In production, send *.vercel.app hits to the custom domain so Google indexes one copy of the site.
+const canonicalOrigin = process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "");
+const redirectVercelHosts = process.env.VERCEL_ENV === "production" && !!canonicalOrigin && !canonicalOrigin.endsWith(".vercel.app");
+
 const nextConfig: NextConfig = {
   // The owner portal is fully session-driven; we use route-level revalidation
   // for public pages and dynamic rendering for /admin (previous caching model).
@@ -47,6 +51,11 @@ const nextConfig: NextConfig = {
     ],
     // Local development stack serves storage from 127.0.0.1.
     dangerouslyAllowLocalIP: process.env.NODE_ENV !== "production",
+  },
+  async redirects() {
+    return redirectVercelHosts
+      ? [{ source: "/:path*", has: [{ type: "host", value: ".+\\.vercel\\.app" }], destination: `${canonicalOrigin}/:path*`, permanent: true }]
+      : [];
   },
   async headers() {
     return [
