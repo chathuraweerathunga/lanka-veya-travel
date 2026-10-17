@@ -63,7 +63,7 @@ export function AdminNav({ role, name, signOut }: { role: "owner" | "admin" | "s
   const nav = (
     <nav aria-label="Owner portal" className="flex h-full flex-col">
       <Link href="/admin" className="flex items-center gap-2.5 px-5 py-5 text-white">
-        <LogoMark className="h-8 text-white" />
+        <LogoMark className="h-8" />
         <span className="leading-tight">
           <span className="block font-display text-lg">Lanka Veya</span>
           <span className="block text-xs text-white/60">Owner portal</span>
@@ -120,7 +120,7 @@ export function AdminNav({ role, name, signOut }: { role: "owner" | "admin" | "s
     <>
       <aside className="on-dark fixed inset-y-0 left-0 z-30 hidden w-64 bg-teal-950 lg:block">{nav}</aside>
       <div className="on-dark sticky top-0 z-30 flex h-14 items-center justify-between bg-teal-950 px-4 text-white lg:hidden">
-        <Link href="/admin" className="flex items-center gap-2"><LogoMark className="h-7 text-white" /> <span className="font-display">Lanka Veya</span></Link>
+        <Link href="/admin" className="flex items-center gap-2"><LogoMark className="h-7" /> <span className="font-display">Lanka Veya</span></Link>
         <button type="button" aria-expanded={open} aria-controls="admin-mobile-nav" onClick={() => setOpenedOn(open ? null : pathname)} className="inline-flex size-10 items-center justify-center">
           {open ? <X className="size-5" aria-hidden /> : <Menu className="size-5" aria-hidden />}
           <span className="sr-only">{open ? "Close menu" : "Open menu"}</span>

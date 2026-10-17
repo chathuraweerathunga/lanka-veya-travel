@@ -1,3 +1,10 @@
+# Lanka Veya Travel — logo (2026)
+
+The current logo is `logo-2026/lanka-veya-travel-logo-master.jpg`: palms, a rising sun and a mountain over the sea, with "LANKA veya TRAVEL" in deep green and gold.
+`python3 brand/build_logo_2026.py brand/logo-2026/lanka-veya-travel-logo-master.jpg .` builds the web files in `public/brand/` (transparent full logo, ivory version for dark backgrounds, emblem, horizontal header lockup, square icons) and `src/app/icon.png` / `apple-icon.png`.
+
+The sections below describe the earlier vector mark, kept for reference.
+
 # Lanka Veya Travel — logo
 
 The mark is a single shape that reads three ways: the island of Sri Lanka, a tea leaf, and a winding road through it, with a rising sun in champagne gold.

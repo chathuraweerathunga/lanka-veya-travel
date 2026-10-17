@@ -1,42 +1,39 @@
-import { useId } from "react";
+import Image from "next/image";
 import { cn } from "@/lib/utils";
 
-/** The mark's geometry, shared with brand/build_logo.py (100 × 150 box). */
+/** Island outline used as a small decorative glyph on the home page. */
 export const MARK_ISLAND = "M42 4C49 20 70 42 81 66C93 92 88 122 66 137C46 150 19 141 12 116C6 94 15 72 25 52C32 37 38 22 42 4Z";
-export const MARK_ROAD = "M30 150C40 120 72 112 60 84C50 60 30 50 44 0";
+
+// Web variants of the 2026 logo, built by brand/build_logo_2026.py.
+const HORIZONTAL = { dark: "/brand/logo-horizontal.png", light: "/brand/logo-horizontal-light.png", width: 1100, height: 222 };
+const EMBLEM = { dark: "/brand/logo-emblem.png", light: "/brand/logo-emblem-light.png", width: 600, height: 293 };
 
 /**
- * Lanka Veya Travel mark: the island of Sri Lanka, read also as a tea leaf, cut
- * by a winding road, with a rising sun. The island takes the current text colour.
- * `animated` draws the road and raises the sun once on first paint; `mono` draws the sun in the text colour too.
+ * Lanka Veya Travel emblem (palms, sun and mountain over the sea), without the name.
+ * `tone="light"` is the ivory version for dark backgrounds.
  */
-export function LogoMark({ className, animated = false, mono = false }: { className?: string; animated?: boolean; mono?: boolean }) {
-  const id = useId().replace(/:/g, "");
+export function LogoMark({ className, tone = "light" }: { className?: string; tone?: "dark" | "light" }) {
   return (
-    <svg viewBox="0 0 100 150" className={cn("h-10 w-auto overflow-visible", animated && "logo-animated", className)} aria-hidden focusable="false">
-      <mask id={`road-${id}`} maskUnits="userSpaceOnUse" x="-10" y="-10" width="120" height="170">
-        <rect x="-10" y="-10" width="120" height="170" fill="#fff" />
-        <path className="logo-road" d={MARK_ROAD} fill="none" stroke="#000" strokeWidth="5.2" pathLength={1} />
-      </mask>
-      <path d={MARK_ISLAND} fill="currentColor" mask={`url(#road-${id})`} />
-      <circle className="logo-sun" cx="78" cy="25" r="8.5" fill={mono ? "currentColor" : "var(--color-champagne)"} />
-    </svg>
+    <Image src={EMBLEM[tone]} alt="" width={EMBLEM.width} height={EMBLEM.height} className={cn("h-10 w-auto", className)} aria-hidden />
   );
 }
 
-export function Wordmark({ className, tone = "dark", animated = false }: { className?: string; tone?: "dark" | "light"; animated?: boolean }) {
+/**
+ * The full horizontal logo. `tone="dark"` is the green artwork for light surfaces;
+ * inside the site it switches to the ivory artwork when the dark theme is on.
+ */
+export function Wordmark({ className, tone = "dark", animated = false, priority = false }: { className?: string; tone?: "dark" | "light"; animated?: boolean; priority?: boolean }) {
+  const img = (src: string, extra?: string) => (
+    <Image src={src} alt="Lanka Veya Travel" width={HORIZONTAL.width} height={HORIZONTAL.height} priority={priority} className={cn("h-full w-auto", extra)} />
+  );
   return (
-    <span className={cn("group/wordmark inline-flex items-center gap-3", tone === "light" ? "text-white" : "text-teal-900", className)}>
-      <LogoMark animated={animated} className={tone === "light" ? "text-ivory" : undefined} />
-      <span className="flex flex-col leading-none">
-        <span className="font-display text-[1.4rem] font-semibold tracking-[-0.035em]">
-          Lanka Veya
-        </span>
-        <span className={cn("mt-1.5 flex items-center gap-2 text-[0.62rem] font-semibold tracking-[0.42em]", tone === "light" ? "text-champagne" : "text-champagne-700")}>
-          TRAVEL
-          <span className="h-px flex-1 bg-current opacity-80 transition-[flex-grow] duration-500 ease-[var(--ease-out-soft)]" aria-hidden />
-        </span>
-      </span>
+    <span className={cn("inline-flex h-11 items-center", animated && "logo-animated", className)}>
+      {tone === "light" ? img(HORIZONTAL.light) : (
+        <>
+          {img(HORIZONTAL.dark, "logo-for-light")}
+          {img(HORIZONTAL.light, "logo-for-dark")}
+        </>
+      )}
     </span>
   );
 }

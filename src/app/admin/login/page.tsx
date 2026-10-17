@@ -14,7 +14,7 @@ export default async function LoginPage({ searchParams }: PageProps<"/admin/logi
   return (
     <main className="flex min-h-dvh items-center justify-center bg-ivory px-4 py-16">
       <div className="w-full max-w-sm">
-        <Link href="/" className="mb-10 flex justify-center"><Wordmark /></Link>
+        <Link href="/" className="mb-10 flex justify-center"><Wordmark className="h-14" priority /></Link>
         <div className="rounded-md border border-line bg-white p-7">
           <h1 className="font-display text-2xl text-teal-900">Owner portal</h1>
           <p className="mt-1 text-sm text-muted">Sign in with your team account.</p>
