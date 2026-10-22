@@ -2,6 +2,7 @@ import Script from "next/script";
 import { SiteHeader } from "@/components/site/site-header";
 import { SiteFooter } from "@/components/site/site-footer";
 import { WhatsAppFloat } from "@/components/site/whatsapp-float";
+import { ChatWidget } from "@/components/site/chat-widget";
 import { TiltEffects } from "@/components/site/tilt-effects";
 import { getPublicSettings } from "@/lib/data/settings";
 import { whatsappLink, whatsappMessages } from "@/lib/whatsapp";
@@ -25,6 +26,9 @@ export default async function SiteLayout({ children }: LayoutProps<"/">) {
       </main>
       <SiteFooter settings={settings} />
       <WhatsAppFloat href={wa} />
+      {settings.assistant.enabled && process.env.ANTHROPIC_API_KEY ? (
+        <ChatWidget name={settings.assistant.name || "Veya"} welcome={settings.assistant.welcome} whatsappHref={wa} />
+      ) : null}
       <TiltEffects />
       {plausible && /^[a-z0-9.-]+$/i.test(plausible) ? (
         <Script defer data-domain={plausible} src="https://plausible.io/js/script.js" strategy="afterInteractive" />

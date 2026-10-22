@@ -39,6 +39,12 @@ const SCHEMAS = {
     plausible_domain: text(120).refine((v) => v === "" || /^[a-z0-9.-]+$/i.test(v), "Enter a domain like lankaveyatravel.com"),
     ga_measurement_id: text(20).refine((v) => v === "" || /^G-[A-Z0-9]+$/.test(v), "Use a GA4 ID like G-XXXXXXX"),
   }),
+  assistant: z.object({
+    enabled: z.string().optional().transform((v) => v === "on"),
+    name: z.string().trim().min(1, "Give the assistant a name.").max(40),
+    welcome: z.string().trim().min(1, "Write a welcome message.").max(400),
+    notes: text(6000),
+  }),
   notifications: z.object({ notify_email: email, enabled: z.string().optional().transform((v) => v === "on") }),
   page_about: z.object({ title: z.string().trim().min(1).max(120), intro: text(400), body: text(20000), updated_on: text(10) }),
   page_privacy: z.object({ title: z.string().trim().min(1).max(120), intro: text(400), body: text(20000), updated_on: text(10) }),
