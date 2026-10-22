@@ -5,7 +5,7 @@ import { PageHeader, Panel } from "@/components/admin/ui";
 import { Alert } from "@/components/ui/alert";
 import { DEFAULT_SETTINGS } from "@/lib/data/settings";
 import { isSupabaseConfigured } from "@/lib/env";
-import { AnalyticsForm, BusinessForm, CurrencyDefaultsForm, FooterForm, LinksForm, NotificationsForm, SeoForm } from "./settings-forms";
+import { AnalyticsForm, AssistantForm, BusinessForm, CurrencyDefaultsForm, FooterForm, LinksForm, NotificationsForm, SeoForm } from "./settings-forms";
 
 export const metadata: Metadata = { title: "Settings & links" };
 
@@ -29,6 +29,12 @@ export default async function SettingsPage() {
         ) : null}
         {!isSupabaseConfigured() ? <Alert tone="error">Supabase environment variables are missing.</Alert> : null}
         <Panel title="Business profile"><BusinessForm v={get("business")} /></Panel>
+        <Panel title="AI chat assistant">
+          {!process.env.ANTHROPIC_API_KEY ? (
+            <div className="mb-4"><Alert tone="warning" title="Not connected yet">The chat stays hidden until ANTHROPIC_API_KEY is set in Vercel (Project → Settings → Environment Variables). See docs/DEPLOYMENT.md.</Alert></div>
+          ) : null}
+          <AssistantForm v={get("assistant")} />
+        </Panel>
         <Panel title="Notifications"><NotificationsForm v={get("notifications")} /></Panel>
         <Panel title="Travel platforms & reviews">
           <p className="mb-4 text-sm text-muted">Add only your own, real listings. Ratings and badges are never shown unless you add an approved widget.</p>

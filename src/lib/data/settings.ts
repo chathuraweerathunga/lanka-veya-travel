@@ -32,6 +32,8 @@ export type SeoSettings = { default_title: string; default_description: string; 
 export type CurrencySettings = { default: string; display: string[] };
 export type FooterSettings = { about: string };
 export type AnalyticsSettings = { plausible_domain: string; ga_measurement_id: string };
+/** The website's AI chat assistant (Admin → Settings → AI chat assistant). */
+export type AssistantSettings = { enabled: boolean; name: string; welcome: string; notes: string };
 
 export type PublicSettings = {
   business: BusinessSettings;
@@ -42,6 +44,7 @@ export type PublicSettings = {
   currency: CurrencySettings;
   footer: FooterSettings;
   analytics: AnalyticsSettings;
+  assistant: AssistantSettings;
   home_media: HomeMedia;
 };
 
@@ -91,6 +94,12 @@ export const DEFAULT_SETTINGS: PublicSettings = {
       "Lanka Veya Travel plans private journeys across Sri Lanka: tours, transfers and drivers, arranged personally and confirmed only once every detail is agreed.",
   },
   analytics: { plausible_domain: "", ga_measurement_id: "" },
+  assistant: {
+    enabled: true,
+    name: "Veya",
+    welcome: "Ayubowan! I'm Veya, Lanka Veya Travel's assistant. Ask me anything about our tours, airport transfers, drivers or travelling in Sri Lanka, and I'll do my best to help.",
+    notes: "",
+  },
   home_media: DEFAULT_HOME_MEDIA,
 };
 
