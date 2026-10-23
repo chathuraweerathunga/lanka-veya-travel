@@ -68,9 +68,15 @@ export function SiteFooter({ settings }: { settings: PublicSettings }) {
       ) : null}
 
       <div className="border-t border-white/10">
-        <div className="container-page flex flex-col gap-2 py-6 text-xs text-white/55 md:flex-row md:justify-between">
+        <div className="container-page flex flex-col gap-2 pb-36 pt-6 text-xs text-white/55 md:flex-row md:justify-between md:gap-6 md:pb-8 md:pr-60">
           <p>© {new Date().getFullYear()} {b.name}. All requests are confirmed personally by our team.</p>
           <p>Photography from Unsplash contributors, credited on each page.</p>
+          <p className="whitespace-nowrap">
+            Developed by{" "}
+            <a href="https://www.starxio.com" target="_blank" rel="noopener" className="font-medium text-white/80 underline-offset-2 hover:text-white hover:underline">
+              Starxio
+            </a>
+          </p>
         </div>
       </div>
     </footer>
