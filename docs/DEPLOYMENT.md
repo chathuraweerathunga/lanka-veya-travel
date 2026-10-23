@@ -15,7 +15,6 @@ Target: **Vercel** (app) + **Supabase** (database, auth, storage). Nothing in th
 | `SUPABASE_SECRET_KEY` in Vercel (Production + Preview, *Sensitive*) | Set |
 | Supabase Auth settings (sign-ups off, redirect URLs, templates) | **To do** — see below |
 | Resend domain + `RESEND_API_KEY` | **To do** |
-| `ANTHROPIC_API_KEY` for the AI chat assistant (Production, *Sensitive*); the chat button stays hidden until it is set | **To do** |
 | First owner account (lankaveyatravel@gmail.com, active owner) | Created — change the temporary password at `/admin/auth/set-password` after first sign-in |
 | Custom domain `lankaveyatravel.com` (registered at Cloudflare; DNS at Cloudflare: `A @ 76.76.21.21` and `CNAME www cname.vercel-dns.com`, both **DNS only**, grey cloud) | Connected |
 | Google Search Console + sitemap `https://lankaveyatravel.com/sitemap.xml` | **To do** |
@@ -65,7 +64,6 @@ Until email is configured, requests are still saved; deliveries show **skipped**
    | `SUPABASE_SECRET_KEY` | secret key — **mark as Sensitive** |
    | `RESEND_API_KEY` | Resend key — Sensitive |
    | `EMAIL_FROM` | verified sender |
-   | `ANTHROPIC_API_KEY` | Claude API key for the chat assistant — Sensitive (optional; chat is hidden without it) |
    | `RATE_LIMIT_SALT` | `openssl rand -base64 32` — Sensitive |
 
 3. Deploy. Preview deployments are automatically `noindex` (see `src/app/robots.ts`).

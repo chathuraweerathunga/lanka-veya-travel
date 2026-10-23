@@ -29,10 +29,7 @@ export default async function SettingsPage() {
         ) : null}
         {!isSupabaseConfigured() ? <Alert tone="error">Supabase environment variables are missing.</Alert> : null}
         <Panel title="Business profile"><BusinessForm v={get("business")} /></Panel>
-        <Panel title="AI chat assistant">
-          {!process.env.ANTHROPIC_API_KEY ? (
-            <div className="mb-4"><Alert tone="warning" title="Not connected yet">The chat stays hidden until ANTHROPIC_API_KEY is set in Vercel (Project → Settings → Environment Variables). See docs/DEPLOYMENT.md.</Alert></div>
-          ) : null}
+        <Panel title="Chat assistant">
           <AssistantForm v={get("assistant")} />
         </Panel>
         <Panel title="Notifications"><NotificationsForm v={get("notifications")} /></Panel>
