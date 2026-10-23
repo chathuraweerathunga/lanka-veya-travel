@@ -113,18 +113,10 @@ export function AnalyticsForm({ v }: { v: V }) {
 export function AssistantForm({ v }: { v: V }) {
   return (
     <SettingForm settingKey="assistant">
-      <CheckboxField name="enabled" label="Show the AI chat assistant on the website" defaultChecked={v.enabled !== false} />
+      <CheckboxField name="enabled" label="Show the chat assistant on the website" defaultChecked={v.enabled !== false} />
       <div className="grid gap-4 md:grid-cols-2">
         <TextField name="name" label="Assistant name" defaultValue={s(v, "name")} required />
-        <TextAreaField name="welcome" label="Welcome message" hint="The first message visitors see when they open the chat" defaultValue={s(v, "welcome")} rows={3} className="md:col-span-2" />
-        <TextAreaField
-          name="notes"
-          label="Extra notes for the assistant (optional)"
-          hint="Anything visitors often ask that isn't on the website yet, e.g. typical price ranges, payment methods, current offers, languages your drivers speak. The assistant already knows your tours, destinations, vehicles, FAQs, guides and cancellation policy. Visitors may see anything written here."
-          defaultValue={s(v, "notes")}
-          rows={6}
-          className="md:col-span-2"
-        />
+        <TextAreaField name="welcome" label="Welcome message" hint="The first message visitors see. The assistant answers from your tours, destinations, vehicles, FAQs and guides: add an FAQ in Content to teach it a new answer." defaultValue={s(v, "welcome")} rows={3} className="md:col-span-2" />
       </div>
     </SettingForm>
   );

@@ -26,7 +26,7 @@ export default async function SiteLayout({ children }: LayoutProps<"/">) {
       </main>
       <SiteFooter settings={settings} />
       <WhatsAppFloat href={wa} />
-      {settings.assistant.enabled && process.env.ANTHROPIC_API_KEY ? (
+      {settings.assistant.enabled ? (
         <ChatWidget name={settings.assistant.name || "Veya"} welcome={settings.assistant.welcome} whatsappHref={wa} />
       ) : null}
       <TiltEffects />

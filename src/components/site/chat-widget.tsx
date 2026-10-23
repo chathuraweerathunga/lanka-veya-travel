@@ -6,10 +6,10 @@ import { ArrowUp, MessageCircle, RotateCcw, Sparkles, X } from "lucide-react";
 import { parseMarkdown, type Inline } from "@/lib/chat/markdown";
 import { cn } from "@/lib/utils";
 
-type Msg = { role: "user" | "assistant"; content: string };
+type Msg = { role: "user" | "assistant"; content: string; suggestions?: string[] };
 
-const STORE = "lvt-chat-v1";
-const SUGGESTIONS = ["Plan a 7-day trip for two", "How do airport transfers work?", "When is the best time to visit?", "Which vehicles do you have?"];
+const STORE = "lvt-chat-v2";
+const SUGGESTIONS = ["Show me your tours", "Airport transfer", "Hire a private driver", "Best time to visit", "How does booking work?"];
 
 function InlineParts({ parts, onNavigate }: { parts: Inline[]; onNavigate: () => void }) {
   return (
@@ -45,7 +45,7 @@ function Rich({ text, onNavigate }: { text: string; onNavigate: () => void }) {
   );
 }
 
-/** Floating AI chat assistant: answers from the website's own content and hands off to WhatsApp or the quote form. */
+/** Floating chat assistant: answers from the website's own content (see lib/chat/bot.ts) and hands off to WhatsApp or the quote form. */
 export function ChatWidget({ name, welcome, whatsappHref }: { name: string; welcome: string; whatsappHref: string | null }) {
   const [open, setOpen] = useState(false);
   // Restored from this tab's session; the panel starts closed, so server and client markup still match.
@@ -77,32 +77,24 @@ export function ChatWidget({ name, welcome, whatsappHref }: { name: string; welc
   }, [open]);
 
   async function send(text: string) {
-    const content = text.trim().slice(0, 2000);
+    const content = text.trim().slice(0, 1000);
     if (!content || busy) return;
     const history: Msg[] = [...messages, { role: "user", content }];
     setMessages([...history, { role: "assistant", content: "" }]);
     setInput("");
     setBusy(true);
+    const help = whatsappHref ? `[message us on WhatsApp](${whatsappHref})` : "[contact us](/contact)";
     try {
-      const res = await fetch("/api/chat", {
-        method: "POST",
-        headers: { "content-type": "application/json" },
-        body: JSON.stringify({ messages: history.filter((m) => m.content).slice(-20) }),
-      });
-      if (!res.ok || !res.body) throw new Error(await res.text().catch(() => ""));
-      const reader = res.body.getReader();
-      const decoder = new TextDecoder();
-      let reply = "";
-      for (;;) {
-        const { done, value } = await reader.read();
-        if (done) break;
-        reply += decoder.decode(value, { stream: true });
-        setMessages([...history, { role: "assistant", content: reply }]);
-      }
-    } catch (e) {
-      const reason = e instanceof Error && e.message && e.message.length < 200 ? e.message : "";
-      const help = whatsappHref ? `[message us on WhatsApp](${whatsappHref})` : "[contact us](/contact)";
-      setMessages([...history, { role: "assistant", content: `${reason || "Sorry, I couldn't connect just now."} Please try again, or ${help}.` }]);
+      const previous = messages.filter((m) => m.role === "user").map((m) => m.content).slice(-5);
+      const [res] = await Promise.all([
+        fetch("/api/chat", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ message: content, previous }) }),
+        new Promise((r) => setTimeout(r, 450)), // a short, natural "typing" pause
+      ]);
+      const data = (await res.json().catch(() => ({}))) as { reply?: string; suggestions?: string[]; error?: string };
+      const reply = data.reply ?? `${data.error ?? "Sorry, I couldn't connect just now."} Please try again, or ${help}.`;
+      setMessages([...history, { role: "assistant", content: reply, suggestions: data.suggestions ?? [] }]);
+    } catch {
+      setMessages([...history, { role: "assistant", content: `Sorry, I couldn't connect just now. Please try again, or ${help}.` }]);
     } finally {
       setBusy(false);
     }
@@ -149,7 +141,7 @@ export function ChatWidget({ name, welcome, whatsappHref }: { name: string; welc
             <span className="grid size-9 place-items-center rounded-full bg-white/10"><Sparkles className="size-4 text-champagne" aria-hidden /></span>
             <div className="min-w-0 flex-1 leading-tight">
               <p className="font-semibold">{name}</p>
-              <p className="text-xs text-white/70">Lanka Veya Travel assistant</p>
+              <p className="text-xs text-white/70">Instant answers, any time</p>
             </div>
             {messages.length ? (
               <button type="button" onClick={() => setMessages([])} className="rounded-md p-2 text-white/70 hover:bg-white/10 hover:text-white" aria-label="Start a new chat" title="New chat">
@@ -183,6 +175,15 @@ export function ChatWidget({ name, welcome, whatsappHref }: { name: string; welc
                 </div>
               ),
             )}
+            {!busy && messages.at(-1)?.suggestions?.length ? (
+              <div className="flex flex-wrap gap-2 pt-1">
+                {messages.at(-1)!.suggestions!.map((s) => (
+                  <button key={s} type="button" onClick={() => void send(s)} className="rounded-full border border-line px-3 py-1.5 text-sm text-teal-900 hover:border-teal-700 hover:bg-teal-50">
+                    {s}
+                  </button>
+                ))}
+              </div>
+            ) : null}
           </div>
 
           <form onSubmit={onSubmit} className="border-t border-line p-3">
@@ -195,7 +196,7 @@ export function ChatWidget({ name, welcome, whatsappHref }: { name: string; welc
                 onChange={(e) => setInput(e.target.value)}
                 onKeyDown={onKeyDown}
                 rows={1}
-                maxLength={2000}
+                maxLength={1000}
                 placeholder="Ask about tours, transfers, drivers…"
                 className="max-h-32 min-h-11 flex-1 resize-none rounded-xl border border-line bg-white px-3 py-2.5 text-[0.95rem] text-teal-900 outline-none focus:border-teal-700"
               />
@@ -204,7 +205,7 @@ export function ChatWidget({ name, welcome, whatsappHref }: { name: string; welc
               </button>
             </div>
             <p className="mt-2 flex items-center justify-between gap-2 text-[0.72rem] text-muted">
-              <span>AI assistant: answers can be wrong. Please don&apos;t share card or passport details.</span>
+              <span>Automated assistant. For anything personal, our team is on WhatsApp.</span>
               {whatsappHref ? (
                 <a href={whatsappHref} target="_blank" rel="noopener noreferrer" className="inline-flex shrink-0 items-center gap-1 font-medium text-teal-700">
                   <MessageCircle className="size-3.5" aria-hidden /> WhatsApp

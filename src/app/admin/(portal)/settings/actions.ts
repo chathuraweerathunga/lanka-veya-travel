@@ -43,7 +43,6 @@ const SCHEMAS = {
     enabled: z.string().optional().transform((v) => v === "on"),
     name: z.string().trim().min(1, "Give the assistant a name.").max(40),
     welcome: z.string().trim().min(1, "Write a welcome message.").max(400),
-    notes: text(6000),
   }),
   notifications: z.object({ notify_email: email, enabled: z.string().optional().transform((v) => v === "on") }),
   page_about: z.object({ title: z.string().trim().min(1).max(120), intro: text(400), body: text(20000), updated_on: text(10) }),

@@ -32,8 +32,8 @@ export type SeoSettings = { default_title: string; default_description: string; 
 export type CurrencySettings = { default: string; display: string[] };
 export type FooterSettings = { about: string };
 export type AnalyticsSettings = { plausible_domain: string; ga_measurement_id: string };
-/** The website's AI chat assistant (Admin → Settings → AI chat assistant). */
-export type AssistantSettings = { enabled: boolean; name: string; welcome: string; notes: string };
+/** The website's AI chat assistant (Admin → Settings → Chat assistant). */
+export type AssistantSettings = { enabled: boolean; name: string; welcome: string };
 
 export type PublicSettings = {
   business: BusinessSettings;
@@ -97,8 +97,7 @@ export const DEFAULT_SETTINGS: PublicSettings = {
   assistant: {
     enabled: true,
     name: "Veya",
-    welcome: "Ayubowan! I'm Veya, Lanka Veya Travel's assistant. Ask me anything about our tours, airport transfers, drivers or travelling in Sri Lanka, and I'll do my best to help.",
-    notes: "",
+    welcome: "Ayubowan! I'm Veya, Lanka Veya Travel's chat assistant. Ask me anything about our tours, airport transfers, drivers or travelling in Sri Lanka, and I'll do my best to help.",
   },
   home_media: DEFAULT_HOME_MEDIA,
 };
